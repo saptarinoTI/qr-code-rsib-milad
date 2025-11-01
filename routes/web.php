@@ -22,7 +22,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     /* Data Peserta */
+    Route::get('peserta/qrgenerate/{id}', [PesertaController::class, 'generate'])->name('peserta.qrgenerate');
     Route::put('peserta/verif/{id}', [PesertaController::class, 'verif'])->name('peserta.verif');
+    Route::post('peserta/sendmass', [PesertaController::class, 'sendMassEmail'])->name('peserta.sendmass');
     Route::resource('peserta', PesertaController::class)->except('show');
     /* Scan Kehadiran */
     Route::resource('undangan', UndanganController::class)->except('show', 'create', 'edit', 'update', 'destory');

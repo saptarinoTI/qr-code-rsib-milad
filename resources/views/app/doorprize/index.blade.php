@@ -176,6 +176,28 @@
                                 class="input text-[13px] focus:border-0 focus:outline-0" required min="1"
                                 max="100" />
                         </div>
+
+                        <div class="flex gap-2">
+                            <div class="mb-3">
+                                <label class="label-text font-semibold">Rentang Awal</label>
+                                <input type="number" id="range-start"
+                                    class="input text-[13px] focus:border-0 focus:outline-0" required min="1" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="label-text font-semibold">Rentang Akhir</label>
+                                <input type="number" id="range-end"
+                                    class="input text-[13px] focus:border-0 focus:outline-0" required min="1" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="label-text font-semibold">Nomor Undian (Opsional)</label>
+                                <input type="text" id="specific-number"
+                                    class="input text-[13px] focus:border-0 focus:outline-0" />
+                            </div>
+                        </div>
+
+
                         <button type="submit" class="btn btn-primary w-full">Mulai Undian</button>
                         <a href="{{ route('dashboard') }}" class="btn w-full mt-2">Kembali</a>
                     </form>
@@ -203,13 +225,22 @@
             $('#draw-form').submit(function(e) {
                 e.preventDefault();
 
-                let count = $('#draw-count').val();
-                var formData = {
-                    _token: "{{ csrf_token() }}",
-                    count: count
-                };
+                // let count = $('#draw-count').val();
+                let count = parseInt($('#draw-count').val());
+                let rangeStart = parseInt($('#range-start').val());
+                let rangeEnd = parseInt($('#range-end').val());
+                let specificNumber = $('#specific-number').val().trim();
 
                 if (count < 1) return alert('Jumlah undian minimal 1!');
+                // if (rangeEnd < rangeStart) return alert('Rentang tidak valid!');
+
+                var formData = {
+                    _token: "{{ csrf_token() }}",
+                    count: count,
+                    range_start: rangeStart,
+                    range_end: rangeEnd,
+                    specific_number: specificNumber
+                };
 
                 $.ajax({
                     url: "{{ route('doorprize.store') }}",
@@ -261,13 +292,31 @@
 
                 setTimeout(() => {
                     clearInterval(interval);
-                    display.html(`<h1 class="final">#${index+1} 🏆 ${winner.nama_karyawan}</h1>`);
-                    console.log(winner);
+                    const noUndian = winner.no_undian ?? (index + 1);
+                    // display.html(`<h1 class="final">#${index+1} 🏆 ${winner.nama_karyawan}</h1>`);
+                    display.html(`
+                        <h1 class="final">
+                            #${noUndian} 🏆 ${winner.nama_karyawan}
+                        </h1>
+                    `);
 
-                    const card = $(`
+                    // const card = $(`
+                    //     <div class="card final p-2 border rounded text-center" data-id="${winner.id}">
+                    //         <div class="name font-semibold">${winner.nama_karyawan}</div>
+                    //         <div class="unit text-sm text-gray-500">${winner.unit}</div>
+                    //         <div class="actions mt-2">
+                    //             <button class="mark-hangus btn btn-error btn-xs">Hangus</button>
+                    //         </div>
+                    //     </div>
+                    // `);
+
+                      const card = $(`
                         <div class="card final p-2 border rounded text-center" data-id="${winner.id}">
                             <div class="name font-semibold">${winner.nama_karyawan}</div>
                             <div class="unit text-sm text-gray-500">${winner.unit}</div>
+                            <div class="no-undian text-sm font-bold mt-1 text-primary">
+                                Doorprize: #${noUndian}
+                            </div>
                             <div class="actions mt-2">
                                 <button class="mark-hangus btn btn-error btn-xs">Hangus</button>
                             </div>

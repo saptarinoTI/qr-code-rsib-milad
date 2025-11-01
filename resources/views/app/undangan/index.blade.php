@@ -121,7 +121,7 @@
                         height: 500
                     },
                     supportedScanTypes: [
-                        // Html5QrcodeScanType.SCAN_TYPE_CAMERA
+                        Html5QrcodeScanType.SCAN_TYPE_CAMERA
                     ]
                 });
             // html5QrcodeScanner.render(onScanSuccess, onScanFailure);

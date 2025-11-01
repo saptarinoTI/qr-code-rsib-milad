@@ -48,13 +48,15 @@
                              Scan Makanan
                          </a>
                      </li>
-                     <li>
-                         <a href="{{ route('doorprize.index') }}"
-                             class="px-2 font-medium text-sm {{ request()->is(patterns: 'doorprize*') ? ' menu-active' : '' }}">
-                             <span class="icon-[duo-icons--confetti] size-5"></span>
-                             Doorprize
-                         </a>
-                     </li>
+                     @if (auth()->user()->role == 'admin')
+                         <li>
+                             <a href="{{ route('doorprize.index') }}"
+                                 class="px-2 font-medium text-sm {{ request()->is(patterns: 'doorprize*') ? ' menu-active' : '' }}">
+                                 <span class="icon-[duo-icons--confetti] size-5"></span>
+                                 Doorprize
+                             </a>
+                         </li>
+                     @endif
 
                      <li class="text-base-content/50 mt-2.5 p-2 text-xs uppercase">History</li>
                      <li>

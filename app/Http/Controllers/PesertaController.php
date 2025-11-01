@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendQrCodeEmailJob;
+use App\Mail\QrCodeMail;
 use App\Models\Makanan;
 use App\Models\Peserta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class PesertaController extends Controller
 {
     public function index()
     {
-        $datas = Peserta::get();
+        $datas = Peserta::orderBy('nama_karyawan')->get();
         return view("app.peserta.index", compact("datas"));
     }
 
@@ -125,5 +130,69 @@ class PesertaController extends Controller
                 'type' => 'error'
             ]);
         }
+    }
+
+    public function generate($id)
+    {
+        $participant = Peserta::findOrFail($id);
+
+        $fileName = $participant->qr_code . '.png';
+
+        $qrContent = QrCode::format('png')
+            ->size(1000)
+            ->margin(2)
+            ->style('square')
+            ->errorCorrection('H')
+            ->backgroundColor(255, 255, 255) // Warna putih (RGB)
+            ->color(0, 0, 0) // Warna QR hitam (default)
+            ->generate($participant->qr_code);
+
+        return response($qrContent)
+            ->header('Content-Type', 'image/png')
+            ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"');
+    }
+
+    public function sendMassEmail()
+    {
+        // ini_set('max_execution_time', 500); // 300 detik = 5 menit
+
+        // $pesertas = Peserta::all();
+
+        // foreach ($pesertas as $peserta) {
+        //     if ($peserta->email) {
+        //         // 1️⃣ Generate QR code untuk masing-masing peserta
+        //         $fileName = $peserta->qr_code . '.png';
+        //         $qrImage = QrCode::format('png')
+        //             ->size(1000)
+        //             ->margin(2)
+        //             ->style('square')
+        //             ->errorCorrection('H')
+        //             ->backgroundColor(255, 255, 255) // Warna putih (RGB)
+        //             ->color(0, 0, 0) // Warna QR hitam (default)
+        //             ->generate($peserta->qr_code);
+
+        //         // Simpan sementara di storage
+        //         $path = 'qrcodes/' . $fileName;
+        //         Storage::disk('public')->put($path, $qrImage);
+
+        //         // 2️⃣ Kirim email menggunakan template
+        //         Mail::to($peserta->email)->queue(new QrCodeMail($peserta, $path));
+        //     }
+        // }
+
+        // return back()->with('success', 'Email massal berhasil dikirim ke semua peserta!');
+        ini_set('max_execution_time', 500); // 500 detik = 8 menit
+
+        $pesertas = Peserta::get();
+
+        foreach ($pesertas as $peserta) {
+            if ($peserta->email) {
+                // Menambahkan job ke dalam queue untuk setiap peserta
+                // SendQrCodeEmailJob::dispatch($peserta, $peserta->qr_code); 
+                dispatch(new SendQrCodeEmailJob($peserta, $peserta->qr_code));
+            }
+        }
+
+        return back()->with('success', 'Email massal sedang dikirim melalui queue!');
     }
 }

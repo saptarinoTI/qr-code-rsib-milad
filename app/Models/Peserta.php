@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Peserta extends Model
 {
-    protected $table = "peserta";
+    // protected $table = "partisipan";
+    protected $table = "copy_partisipan";
+    // protected $table = "panitian_test";
     protected $fillable = [
         "nama_karyawan",
         "unit",

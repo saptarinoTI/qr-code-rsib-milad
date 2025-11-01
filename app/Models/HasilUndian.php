@@ -8,7 +8,8 @@ class HasilUndian extends Model
 {
     protected $fillable = [
         "peserta_id",
-        "status"
+        "status",
+        "no_undian"
     ];
 
     public function peserta()

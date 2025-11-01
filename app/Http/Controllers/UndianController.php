@@ -14,17 +14,153 @@ class UndianController extends Controller
         return view("app.doorprize.index");
     }
 
+    // public function store(Request $request)
+    // {
+    //     DB::beginTransaction();
+    //     try {
+    //         // $total = (int) $request->count;
+
+    //         $total = (int) $request->count;
+    //         $rangeStart = (int) $request->range_start;
+    //         $rangeEnd = (int) $request->range_end;
+    //         $specialNumber = $request->specific_number;
+
+    //         if ($total < 1) {
+    //             return response()->json([
+    //                 'status' => 'error',
+    //                 'message' => 'Jumlah undian minimal 1.'
+    //             ], 400);
+    //         }
+
+    //         // Hitung jumlah peserta yang hadir dan belum ikut undian
+    //         $availableCount = Peserta::where('status_hadir', true)
+    //             ->where('sudah_ikut_undian', false)
+    //             ->count();
+
+    //         // Cek apakah jumlah request melebihi peserta yang tersedia
+    //         if ($total > $availableCount) {
+    //             return response()->json([
+    //                 'status' => 'error',
+    //                 'message' => "Jumlah undian ($total) melebihi jumlah peserta yang tersedia ($availableCount).",
+    //             ], 400);
+    //         }
+
+    //         $participants = Peserta::where('status_hadir', true)
+    //             ->where('sudah_ikut_undian', false)
+    //             ->inRandomOrder()
+    //             ->take($total)
+    //             ->get();
+
+    //         // // Buat daftar nomor doorprize
+    //         // $noUndianList = range($rangeStart, $rangeEnd);
+    //         // $noUndianList = array_slice($noUndianList, 0, $total);
+
+    //         // // Ganti nomor terakhir jika ada nomor spesial
+    //         // if ($specialNumber) {
+    //         //     $noUndianList[$total - 1] = $specialNumber;
+    //         // }
+
+    //         // Buat daftar nomor doorprize (bisa naik atau turun)
+    //         $noUndianList = [];
+
+    //         if ($rangeStart <= $rangeEnd) {
+    //             // Urutan naik
+    //             $noUndianList = range($rangeStart, $rangeEnd);
+    //         } else {
+    //             // Urutan turun
+    //             $noUndianList = range($rangeStart, $rangeEnd, -1);
+    //         }
+
+    //         // Ambil hanya sejumlah yang diminta
+    //         $noUndianList = array_slice($noUndianList, 0, $total);
+
+    //         // Jika ada nomor khusus, ganti nomor terakhir
+    //         if (!empty($specialNumber)) {
+    //             $noUndianList[$total - 1] = $specialNumber;
+    //         }
+
+    //         // Simpan ke tabel hasil undian
+    //         foreach ($participants as $index => $p) {
+    //             $p->update(['sudah_ikut_undian' => true]);
+
+    //             HasilUndian::create([
+    //                 'peserta_id' => $p->id,
+    //                 'status' => 'hadir',
+    //                 'no_undian' => $noUndianList[$index] ?? null,
+    //             ]);
+
+    //             // Tambahkan no_undian ke objek peserta untuk dikirim ke frontend
+    //             $p->no_undian = $noUndianList[$index] ?? null;
+    //         }
+
+    //         $sortedParticipants = $participants->values();
+
+    //         DB::commit();
+
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => "Berhasil mengambil $total peserta undian.",
+    //             'winners' => $sortedParticipants,
+    //             'all_present_names' => Peserta::where('status_hadir', true)->pluck('nama_karyawan'),
+    //         ]);
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Terjadi kesalahan saat proses undian.',
+    //             'error' => $th->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
     public function store(Request $request)
     {
         DB::beginTransaction();
+
         try {
             $total = (int) $request->count;
-            // Hitung jumlah peserta yang hadir dan belum ikut undian
+            $rangeStart = (int) $request->range_start;
+            $rangeEnd = (int) $request->range_end;
+            $specialNumber = trim($request->specific_number);
+
+            if ($total < 1) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Jumlah undian minimal 1.'
+                ], 400);
+            }
+
+            // Buat daftar nomor undian dari range (boleh naik atau turun)
+            if ($rangeStart <= $rangeEnd) {
+                $noUndianList = range($rangeStart, $rangeEnd);
+            } else {
+                $noUndianList = range($rangeStart, $rangeEnd, -1);
+            }
+
+            $rangeCount = count($noUndianList);
+
+            // Validasi: jumlah undian tidak boleh melebihi panjang rentang
+            if ($total > $rangeCount) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Jumlah undian ($total) melebihi panjang rentang nomor ($rangeCount).",
+                ], 400);
+            }
+
+            // Potong sesuai jumlah undian
+            $noUndianList = array_slice($noUndianList, 0, $total);
+
+            // Ganti nomor terakhir jika ada nomor spesial
+            if (!empty($specialNumber)) {
+                $noUndianList[$total - 1] = $specialNumber;
+            }
+
+            // Ambil peserta acak
             $availableCount = Peserta::where('status_hadir', true)
                 ->where('sudah_ikut_undian', false)
                 ->count();
 
-            // Cek apakah jumlah request melebihi peserta yang tersedia
             if ($total > $availableCount) {
                 return response()->json([
                     'status' => 'error',
@@ -38,33 +174,40 @@ class UndianController extends Controller
                 ->take($total)
                 ->get();
 
-            // Tandai sudah diundi
-            foreach ($participants as $p) {
+            // Simpan hasil undian
+            foreach ($participants as $index => $p) {
+                $no_undian = $noUndianList[$index]; // Pasti ada
+
                 $p->update(['sudah_ikut_undian' => true]);
 
-                // simpan ke history
                 HasilUndian::create([
                     'peserta_id' => $p->id,
                     'status' => 'hadir',
+                    'no_undian' => $no_undian,
                 ]);
+
+                // tambahkan ke hasil JSON agar muncul di frontend
+                $p->no_undian = (string) $no_undian;
             }
+
             DB::commit();
+
             return response()->json([
                 'status' => 'success',
-                'message' => "Berhasil mengambil $total peserta undian.",
-                'winners' => $participants,
+                'message' => 'Berhasil mengambil peserta undian.',
+                'winners' => $participants->values(),
                 'all_present_names' => Peserta::where('status_hadir', true)->pluck('nama_karyawan'),
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
-
             return response()->json([
                 'status' => 'error',
                 'message' => 'Terjadi kesalahan saat proses undian.',
-                'error' => $th->getMessage()
+                'error' => $th->getMessage(),
             ], 500);
         }
     }
+
 
     public function updatee(Request $request, $id)
     {
