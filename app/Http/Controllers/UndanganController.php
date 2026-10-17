@@ -72,11 +72,6 @@ class UndanganController extends Controller
                     'waktu_absen' => now()
                 ]);
 
-
-                Makanan::firstOrCreate([
-                    'peserta_id' => $peserta->id,
-                ]);
-
                 DB::commit();
                 return response()->json([
                     'status' => 'success',

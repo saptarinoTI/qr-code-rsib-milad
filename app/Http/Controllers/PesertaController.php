@@ -108,7 +108,7 @@ class PesertaController extends Controller
 
     public function all()
     {
-        $alls = Peserta::all();
+        $alls = Peserta::where('unit', 'SMARTKIDS')->get();
         DB::beginTransaction();
         try {
             foreach ($alls as $all) {
