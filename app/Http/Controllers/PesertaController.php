@@ -188,7 +188,7 @@ class PesertaController extends Controller
         foreach ($pesertas as $peserta) {
             if ($peserta->email) {
                 // Menambahkan job ke dalam queue untuk setiap peserta
-                // SendQrCodeEmailJob::dispatch($peserta, $peserta->qr_code); 
+                // SendQrCodeEmailJob::dispatch($peserta, $peserta->qr_code);
                 dispatch(new SendQrCodeEmailJob($peserta, $peserta->qr_code));
             }
         }

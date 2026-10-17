@@ -41,13 +41,13 @@
                              Scan Kehadiran
                          </a>
                      </li>
-                     <li>
+                     {{-- <li>
                          <a href="{{ route('makanan.index') }}"
                              class="px-2 font-medium text-sm {{ request()->is(patterns: 'makanan*') ? ' menu-active' : '' }}">
                              <span class="icon-[solar--donut-bitten-bold-duotone] size-5"></span>
                              Scan Makanan
                          </a>
-                     </li>
+                     </li> --}}
                      @if (auth()->user()->role == 'admin')
                          <li>
                              <a href="{{ route('doorprize.index') }}"
@@ -66,13 +66,13 @@
                              History Kehadiran
                          </a>
                      </li>
-                     <li>
+                     {{-- <li>
                          <a href="{{ route('history-scan-makanan.index') }}"
                              class="px-2 font-medium text-sm {{ request()->is(patterns: 'history-scan-makanan*') ? ' menu-active' : '' }}">
                              <span class="icon-[solar--check-read-bold-duotone] size-5"></span>
                              History Makanan
                          </a>
-                     </li>
+                     </li> --}}
                      <li>
                          <a href="{{ route('history-doorprize.index') }}"
                              class="px-2 font-medium text-sm {{ request()->is(patterns: 'history-doorprize*') ? ' menu-active' : '' }}">

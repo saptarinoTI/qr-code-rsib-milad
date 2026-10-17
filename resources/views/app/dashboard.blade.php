@@ -62,9 +62,9 @@
             </div>
         </div>
     </div>
-    
+
     <div class="mt-4 flex gap-4 w-full lg:flex-row flex-col">
-        <div class="card w-full">
+        {{-- <div class="card w-full">
             <div class="card-body border-base-content/20">
                 <div class="flex flex-1 flex-col gap-4">
                     <div class="text-base-content flex items-center gap-2">
@@ -120,6 +120,6 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </x-app>

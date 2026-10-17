@@ -38,7 +38,7 @@
                         <th><span class="flex items-center text-gray-900">Nama Karyawan</span></th>
                         <th><span class="flex items-center text-gray-900">Unit</span></th>
                         <th><span class="flex items-center text-gray-900">Email</span></th>
-                        <th><span class="flex items-center text-gray-900">Whatsapp</span></th>
+                        {{-- <th><span class="flex items-center text-gray-900">Whatsapp</span></th> --}}
                         <th><span class="flex items-center text-gray-900">Qr Code (Slug)</span></th>
                         <th><span class="flex items-center text-gray-900">Status Hadir</span></th>
                         <th><span class="flex items-center text-gray-900">Waktu Absen</span></th>
@@ -72,7 +72,8 @@
                                             class="peserta-verif">
                                             @csrf
                                             @method('PUT')
-                                            <button class="btn btn-circle btn-text btn-sm" aria-label="Action button">
+                                            <button type="submit" class="btn btn-circle btn-text btn-sm"
+                                                aria-label="Action button">
                                                 <span
                                                     class="icon-[solar--check-circle-broken] size-5 bg-primary"></span>
                                             </button>
@@ -84,7 +85,7 @@
                             </td>
                             <td class="text-[13px] font-medium text-gray-900">{{ strtoupper($data->unit) }}</td>
                             <td class="text-[13px] font-medium text-gray-900">{{ $data->email ?? '-' }}</td>
-                            <td class="text-[13px] font-medium text-gray-900">{{ $data->wa ?? '-' }}</td>
+                            {{-- <td class="text-[13px] font-medium text-gray-900">{{ $data->wa ?? '-' }}</td> --}}
                             <td class="text-[13px] font-medium text-gray-900">{{ $data->qr_code }}</td>
                             <td class="text-[13px] font-medium text-gray-900">
                                 {{ $data->status_hadir ? 'HADIR' : 'TIDAK HADIR' }}</td>
@@ -112,26 +113,26 @@
                 const verifForms = document.querySelectorAll('.peserta-verif');
                 const hapusForms = document.querySelectorAll('.peserta-hapus');
 
-                verifForms.forEach(form => {
-                    form.addEventListener('submit', function(e) {
-                        e.preventDefault(); // cegah submit langsung
+                // verifForms.forEach(form => {
+                //     form.addEventListener('submit', function(e) {
+                //         e.preventDefault(); // cegah submit langsung
 
-                        Swal.fire({
-                            title: 'Verifikasi Peserta?',
-                            text: 'Apakah Anda yakin ingin memverifikasi peserta ini?',
-                            icon: 'question',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Ya, verifikasi!',
-                            cancelButtonText: 'Batal'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                form.submit(); // lanjut submit jika dikonfirmasi
-                            }
-                        });
-                    });
-                });
+                //         Swal.fire({
+                //             title: 'Verifikasi Peserta?',
+                //             text: 'Apakah Anda yakin ingin memverifikasi peserta ini?',
+                //             icon: 'question',
+                //             showCancelButton: true,
+                //             confirmButtonColor: '#3085d6',
+                //             cancelButtonColor: '#d33',
+                //             confirmButtonText: 'Ya, verifikasi!',
+                //             cancelButtonText: 'Batal'
+                //         }).then((result) => {
+                //             if (result.isConfirmed) {
+                //                 form.submit(); // lanjut submit jika dikonfirmasi
+                //             }
+                //         });
+                //     });
+                // });
                 hapusForms.forEach(form => {
                     form.addEventListener('submit', function(e) {
                         e.preventDefault(); // cegah submit langsung

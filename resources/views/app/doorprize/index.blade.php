@@ -1,102 +1,3 @@
-{{-- <x-app>
-    <x-slot:title>Peserta - {{ config('app.name') }}</x-slot:title>
-
-    <x-slot:header>Peserta</x-slot:header>
-
-    @if (session()->has('message'))
-        <div class="{{ session('type') == 'success' ? 'bg-green-200/20 text-green-500 border-green' : 'bg-red-200/20 text-red-500 border-red' }}border rounded-lg mb-4 removing:translate-x-5 removing:opacity-0 flex items-center gap-4 transition duration-300 ease-in-out p-3 text-sm"
-            role="alert" id="dismiss-alert1">
-            {{ session('message') }}
-            <button class="ms-auto cursor-pointer leading-none" data-remove-element="#dismiss-alert1"
-                aria-label="Close Button">
-                <span class="icon-[tabler--x] size-4"></span>
-            </button>
-        </div>
-    @endif
-
-
-    <div class="card w-full">
-
-        <div class="card-body border-base-content/20">
-
-            <div id="winner-display" class="winner-box text-center font-bold">🎉 Klik Mulai Undian</div>
-            <button id="start-draw">Mulai Undian</button>
-
-            <table id="users-table" class="table min-w-full">
-                <thead>
-                    <tr>
-                        <th><span class="flex items-center text-gray-900">Nama Karyawan</span></th>
-                        <th><span class="flex items-center text-gray-900">Unit</span></th>
-                        <th><span class="flex items-center text-gray-900">Status</span></th>
-                        <th><span class="flex items-center text-gray-900">Aksi</span></th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-
-        </div>
-    </div>
-
-    @section('script')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                if (document.getElementById("users-table") && typeof simpleDatatables.DataTable !== 'undefined') {
-                    const dataTable = new simpleDatatables.DataTable("#users-table", {
-                        searchable: false,
-                        sortable: false,
-                        perPageSelect: false,
-                        perPage: 25,
-                    });
-                }
-
-                const verifForms = document.querySelectorAll('.peserta-verif');
-                const hapusForms = document.querySelectorAll('.peserta-hapus');
-
-                verifForms.forEach(form => {
-                    form.addEventListener('submit', function(e) {
-                        e.preventDefault(); // cegah submit langsung
-
-                        Swal.fire({
-                            title: 'Verifikasi Peserta?',
-                            text: 'Apakah Anda yakin ingin memverifikasi peserta ini?',
-                            icon: 'question',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Ya, verifikasi!',
-                            cancelButtonText: 'Batal'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                form.submit(); // lanjut submit jika dikonfirmasi
-                            }
-                        });
-                    });
-                });
-                hapusForms.forEach(form => {
-                    form.addEventListener('submit', function(e) {
-                        e.preventDefault(); // cegah submit langsung
-
-                        Swal.fire({
-                            title: 'Hapus Peserta?',
-                            text: 'Apakah Anda yakin ingin hapus peserta ini?',
-                            icon: 'question',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Ya, hapus!',
-                            cancelButtonText: 'Batal'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                form.submit(); // lanjut submit jika dikonfirmasi
-                            }
-                        });
-                    });
-                });
-            });
-        </script>
-    @endsection
-</x-app> --}}
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -110,28 +11,129 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.3/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
-        .cardd {
-            width: 150px;
-            height: 120px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
+        /* Popup roda undian */
+        #draw-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            background-color: #f9f9f9;
-            transition: all 0.3s ease;
-            padding: 10px;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(5px);
         }
 
-        .cardd.final {
-            border-color: gold;
-            background-color: #fff8dc;
+        #draw-modal.hidden {
+            display: none !important;
         }
 
-        .status {
-            margin-top: 5px;
-            font-weight: bold;
+        .draw-modal-content {
+            width: 100%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+            border-radius: 20px;
+            background: white;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .draw-wheel-wrapper {
+            position: relative;
+            width: min(78vw, 360px);
+            height: min(78vw, 360px);
+            margin: 24px auto;
+        }
+
+        .draw-wheel-pointer {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            z-index: 5;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+            border-top: 32px solid #dc2626;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .25));
+        }
+
+        #draw-wheel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border: 7px solid #fbbf24;
+            border-radius: 50%;
+            background: conic-gradient(#2563eb 0deg 60deg,
+                    #dc2626 60deg 120deg,
+                    #16a34a 120deg 180deg,
+                    #9333ea 180deg 240deg,
+                    #ea580c 240deg 300deg,
+                    #0891b2 300deg 360deg);
+            box-shadow:
+                0 0 0 5px white,
+                0 0 0 9px #fbbf24,
+                0 10px 30px rgba(0, 0, 0, .25);
+            transform: rotate(0deg);
+            transform-origin: center;
+        }
+
+        #draw-wheel.spinning {
+            transition: transform 5s cubic-bezier(.12, .75, .18, 1);
+        }
+
+        .draw-wheel-name {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 42%;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.2;
+            text-align: right;
+            overflow-wrap: anywhere;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, .7);
+            transform-origin: 0 50%;
+        }
+
+        .draw-wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+            border: 4px solid #fbbf24;
+            border-radius: 50%;
+            background: white;
+            color: #1e293b;
+            font-size: 25px;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .2);
+        }
+
+        #draw-modal-status {
+            min-height: 28px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .draw-modal-content {
+                padding: 18px 12px;
+            }
+
+            .draw-wheel-name {
+                font-size: 9px;
+            }
         }
     </style>
 </head>
@@ -207,6 +209,31 @@
                         muncul di sini 🎉
                     </div>
                     <div id="winner-grid" class="grid grid-cols-5 gap-2 mt-4"></div>
+
+                    <!-- Popup animasi roda undian -->
+                    <div id="draw-modal" class="hidden">
+                        <div class="draw-modal-content">
+                            <h2 class="text-2xl font-extrabold text-gray-800">
+                                🎡 Undian Doorprize
+                            </h2>
+
+                            <p class="mt-2 text-sm text-gray-500">
+                                Roda sedang berputar. Semoga beruntung!
+                            </p>
+
+                            <div class="draw-wheel-wrapper">
+                                <div class="draw-wheel-pointer"></div>
+
+                                <div id="draw-wheel">
+                                    <div class="draw-wheel-center">🎁</div>
+                                </div>
+                            </div>
+
+                            <p id="draw-modal-status">
+                                Mempersiapkan undian...
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -221,20 +248,209 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
         $(document).ready(function() {
+            let isDrawing = false;
+
+            const modal = $('#draw-modal');
+            const wheel = document.getElementById('draw-wheel');
+            const modalStatus = $('#draw-modal-status');
+
+            /*
+             * Membuat daftar nama pada roda.
+             * all_present_names harus berasal dari backend dan hanya
+             * berisi peserta yang belum pernah mendapatkan undian.
+             */
+            function createDoorprizeWheel(allNames) {
+                $('#draw-wheel .draw-wheel-name').remove();
+
+                const colors = [
+                    '#2563eb',
+                    '#dc2626',
+                    '#16a34a',
+                    '#9333ea',
+                    '#ea580c',
+                    '#0891b2',
+                    '#be123c',
+                    '#4d7c0f',
+                    '#7e22ce',
+                    '#0369a1'
+                ];
+
+                const names = allNames
+                    .map(function(item) {
+                        return typeof item === 'string' ?
+                            item :
+                            (item.nama_karyawan || item.name || '');
+                    })
+                    .filter(Boolean);
+
+                if (names.length === 0) {
+                    wheel.style.background = '#64748b';
+                    return false;
+                }
+
+                const segment = 360 / names.length;
+
+                const gradient = names.map(function(_, index) {
+                    const start = index * segment;
+                    const end = (index + 1) * segment;
+                    return `${colors[index % colors.length]} ${start}deg ${end}deg`;
+                }).join(', ');
+
+                wheel.style.background = `conic-gradient(${gradient})`;
+
+                names.forEach(function(name, index) {
+                    const label = document.createElement('div');
+
+                    label.className = 'draw-wheel-name';
+                    label.textContent = name;
+
+                    const angle = index * segment + segment / 2;
+
+                    label.style.transform =
+                        `rotate(${angle}deg) translateY(-50%)`;
+
+                    wheel.appendChild(label);
+                });
+
+                return true;
+            }
+
+            /*
+             * Satu animasi roda untuk seluruh batch undian.
+             * Pemenang tetap menggunakan hasil resmi dari backend.
+             */
+            // function spinDoorprizeWheel() {
+            //     return new Promise(function(resolve) {
+            //         wheel.classList.remove('spinning');
+            //         wheel.style.transition = 'none';
+            //         wheel.style.transform = 'rotate(0deg)';
+
+            //         // Memastikan browser menerapkan posisi awal.
+            //         void wheel.offsetWidth;
+
+            //         const randomAngle = Math.floor(Math.random() * 360);
+            //         const finalAngle = 360 * 5 + randomAngle;
+
+            //         wheel.style.transition =
+            //             'transform 5s cubic-bezier(.12, .75, .18, 1)';
+
+            //         wheel.classList.add('spinning');
+            //         wheel.style.transform = `rotate(${finalAngle}deg)`;
+
+            //         window.setTimeout(function() {
+            //             wheel.classList.remove('spinning');
+            //             resolve();
+            //         }, 5100);
+            //     });
+            // }
+            function spinDoorprizeWheel(firstWinnerIndex, totalParticipants) {
+                return new Promise(function(resolve) {
+                    wheel.classList.remove('spinning');
+                    wheel.style.transition = 'none';
+                    wheel.style.transform = 'rotate(0deg)';
+
+                    // Memastikan browser menerapkan posisi awal.
+                    void wheel.offsetWidth;
+
+                    // Sudut setiap segmen roda.
+                    const segmentAngle = 360 / totalParticipants;
+
+                    // Posisi tengah segmen peserta pertama yang menang.
+                    const winnerCenterAngle =
+                        (firstWinnerIndex * segmentAngle) + (segmentAngle / 2);
+
+                    // Panah berada di bagian atas roda (270 derajat).
+                    const targetAngle = (270 - winnerCenterAngle + 360) % 360;
+
+                    // Putar 5 kali penuh lalu berhenti tepat pada pemenang pertama.
+                    const finalAngle = (360 * 5) + targetAngle;
+
+                    wheel.style.transition =
+                        'transform 5s cubic-bezier(.12, .75, .18, 1)';
+
+                    wheel.classList.add('spinning');
+                    wheel.style.transform = `rotate(${finalAngle}deg)`;
+
+                    window.setTimeout(function() {
+                        wheel.classList.remove('spinning');
+                        resolve();
+                    }, 5100);
+                });
+            }
+
+            /*
+             * Menampilkan semua pemenang sekaligus setelah roda berhenti.
+             */
+            function showAllWinners(winners) {
+                const grid = $('#winner-grid');
+                grid.empty();
+
+                $('#winner-display').html(
+                    `<h2 class="text-2xl font-extrabold text-center">
+                🎉 ${winners.length} Pemenang Doorprize 🎉
+            </h2>`
+                );
+
+                winners.forEach(function(winner, index) {
+                    const noUndian = winner.no_undian ?? (index + 1);
+
+                    const card = $('<div>', {
+                        class: 'card final p-3 border rounded-xl text-center',
+                        'data-id': winner.id
+                    });
+
+                    $('<div>', {
+                        class: 'name font-semibold'
+                    }).text(winner.nama_karyawan || '').appendTo(card);
+
+                    $('<div>', {
+                        class: 'unit text-sm text-gray-500'
+                    }).text(winner.unit || '').appendTo(card);
+
+                    $('<div>', {
+                        class: 'no-undian text-sm font-bold mt-1 text-primary'
+                    }).text(`Doorprize: #${noUndian}`).appendTo(card);
+
+                    const actions = $('<div>', {
+                        class: 'actions mt-2'
+                    });
+
+                    $('<button>', {
+                        type: 'button',
+                        class: 'mark-hangus btn btn-error btn-xs',
+                        text: 'Hangus'
+                    }).appendTo(actions);
+
+                    card.append(actions);
+                    grid.append(card);
+                });
+
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 200,
+                        spread: 100,
+                        origin: {
+                            y: 0.6
+                        }
+                    });
+                }
+            }
 
             $('#draw-form').submit(function(e) {
                 e.preventDefault();
 
-                // let count = $('#draw-count').val();
-                let count = parseInt($('#draw-count').val());
-                let rangeStart = parseInt($('#range-start').val());
-                let rangeEnd = parseInt($('#range-end').val());
-                let specificNumber = $('#specific-number').val().trim();
+                if (isDrawing) return;
 
-                if (count < 1) return alert('Jumlah undian minimal 1!');
-                // if (rangeEnd < rangeStart) return alert('Rentang tidak valid!');
+                const count = parseInt($('#draw-count').val(), 10);
+                const rangeStart = parseInt($('#range-start').val(), 10);
+                const rangeEnd = parseInt($('#range-end').val(), 10);
+                const specificNumber = $('#specific-number').val().trim();
 
-                var formData = {
+                if (count < 1) {
+                    return alert('Jumlah undian minimal 1!');
+                }
+
+                const formData = {
                     _token: "{{ csrf_token() }}",
                     count: count,
                     range_start: rangeStart,
@@ -242,17 +458,19 @@
                     specific_number: specificNumber
                 };
 
+                isDrawing = true;
+
                 $.ajax({
                     url: "{{ route('doorprize.store') }}",
                     method: 'POST',
                     data: formData,
-                    dataType: "json",
-                    success: function(data) {
-                        const winners = data.winners;
-                        const allNames = data.all_present_names;
+                    dataType: 'json',
 
+                    success: async function(data) {
+                        const winners = data.winners || [];
+                        const allNames = data.all_present_names || [];
 
-                        if (!winners || winners.length === 0) {
+                        if (winners.length === 0) {
                             Swal.fire({
                                 icon: 'info',
                                 title: 'Info',
@@ -261,11 +479,74 @@
                             return;
                         }
 
+                        /*
+                         * Nama pada roda berasal dari all_present_names.
+                         * Pastikan backend hanya mengirim peserta yang
+                         * belum pernah mendapatkan undian.
+                         */
+                        const wheelCreated = createDoorprizeWheel(allNames);
+
+                        if (!wheelCreated) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Info',
+                                text: 'Tidak ada peserta yang tersedia untuk ditampilkan pada roda.'
+                            });
+                            return;
+                        }
+
                         $('#winner-grid').empty();
-                        animateWinners(0, winners, allNames);
+
+                        $('#winner-display').html(
+                            '🎡 Roda sedang berputar...'
+                        );
+
+                        modalStatus.text('Mengundi ' + winners.length + ' pemenang...');
+
+                        modal.removeClass('hidden');
+
+                        try {
+                            // Hanya satu kali proses putaran untuk satu batch.
+                            // await spinDoorprizeWheel();
+                            const firstWinner = winners[0];
+
+                            const firstWinnerIndex = allNames.findIndex(function(item) {
+                                const participantId = typeof item === 'string' ?
+                                    null :
+                                    item.id;
+
+                                return participantId !== null &&
+                                    String(participantId) === String(firstWinner.id);
+                            });
+
+                            await spinDoorprizeWheel(
+                                firstWinnerIndex >= 0 ? firstWinnerIndex : 0,
+                                allNames.length
+                            );
+
+                            modalStatus.text('Undian selesai!');
+
+                            // Tutup popup setelah roda berhenti.
+                            modal.addClass('hidden');
+
+                            // Tampilkan seluruh pemenang sekaligus.
+                            showAllWinners(winners);
+                        } catch (error) {
+                            console.error('Animasi undian gagal:', error);
+
+                            modal.addClass('hidden');
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Animasi undian gagal ditampilkan.'
+                            });
+                        }
                     },
+
                     error: function(xhr) {
                         let msg = 'Terjadi kesalahan saat mengambil data undian.';
+
                         if (xhr.responseJSON && xhr.responseJSON.message) {
                             msg = xhr.responseJSON.message;
                         }
@@ -275,67 +556,17 @@
                             title: 'Error',
                             text: msg
                         });
+                    },
+
+                    complete: function() {
+                        isDrawing = false;
                     }
                 });
             });
 
-            function animateWinners(index, winners, allNames) {
-                if (index >= winners.length) return;
-
-                const winner = winners[index];
-                const display = $('#winner-display');
-
-                const interval = setInterval(() => {
-                    const randomName = allNames[Math.floor(Math.random() * allNames.length)];
-                    display.html(`<h2>🎡 ${randomName}</h2>`);
-                }, 50);
-
-                setTimeout(() => {
-                    clearInterval(interval);
-                    const noUndian = winner.no_undian ?? (index + 1);
-                    // display.html(`<h1 class="final">#${index+1} 🏆 ${winner.nama_karyawan}</h1>`);
-                    display.html(`
-                        <h1 class="final">
-                            #${noUndian} 🏆 ${winner.nama_karyawan}
-                        </h1>
-                    `);
-
-                    // const card = $(`
-                    //     <div class="card final p-2 border rounded text-center" data-id="${winner.id}">
-                    //         <div class="name font-semibold">${winner.nama_karyawan}</div>
-                    //         <div class="unit text-sm text-gray-500">${winner.unit}</div>
-                    //         <div class="actions mt-2">
-                    //             <button class="mark-hangus btn btn-error btn-xs">Hangus</button>
-                    //         </div>
-                    //     </div>
-                    // `);
-
-                      const card = $(`
-                        <div class="card final p-2 border rounded text-center" data-id="${winner.id}">
-                            <div class="name font-semibold">${winner.nama_karyawan}</div>
-                            <div class="unit text-sm text-gray-500">${winner.unit}</div>
-                            <div class="no-undian text-sm font-bold mt-1 text-primary">
-                                Doorprize: #${noUndian}
-                            </div>
-                            <div class="actions mt-2">
-                                <button class="mark-hangus btn btn-error btn-xs">Hangus</button>
-                            </div>
-                        </div>
-                    `);
-                    $('#winner-grid').append(card);
-
-                    confetti({
-                        particleCount: 200,
-                        spread: 100,
-                        origin: {
-                            y: 0.6
-                        }
-                    });
-
-                    animateWinners(index + 1, winners, allNames);
-                }, 1000);
-            }
-
+            /*
+             * Fitur Hangus tetap menggunakan endpoint dan status asli.
+             */
             $(document).on('click', '.mark-hangus', function() {
                 const card = $(this).closest('.card');
                 const id = card.data('id');
@@ -348,22 +579,28 @@
                         status: status,
                         _token: '{{ csrf_token() }}'
                     },
+
                     success: function() {
-                        card.find('.status').text(status.charAt(0).toUpperCase() + status.slice(
-                            1));
-                        if (status === 'hangus') card.css('opacity', '0.5');
+                        card.find('.status').text(
+                            status.charAt(0).toUpperCase() + status.slice(1)
+                        );
+
+                        if (status === 'hangus') {
+                            card.css('opacity', '0.5');
+                        }
+
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
                             text: 'Undian Doorprize Dibatalkan.'
                         });
                     },
+
                     error: function() {
                         alert('Gagal update status');
                     }
                 });
             });
-
         });
     </script>
 </body>

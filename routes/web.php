@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('history-scan-makanan/{id}', [HistoryMakananController::class, 'edit'])->name('history-scan-makanan.edit');
     Route::put('history-scan-makanan/{id}', [HistoryMakananController::class, 'update'])->name('history-scan-makanan.put');
     /* History Doorprize  */
-    Route::resource('history-doorprize', HistoryUndianController::class)->except('show', 'update', 'create', 'store', 'edit', 'destory');
+    Route::resource('history-doorprize', HistoryUndianController::class)->except('show', 'create', 'store', 'edit');
     /* Data Pengguna */
     Route::resource('pengguna', PenggunaController::class)->except('show');
 

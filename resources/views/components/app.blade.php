@@ -38,7 +38,7 @@
             <footer class="mx-auto w-full max-w-7xl px-6 py-3.5">
                 <div class="flex items-center justify-between gap-3 text-sm max-lg:flex-col">
                     <p class="text-gray-500 text-center text-xs font-semibold">
-                        ©2025 - Milad RS. Islam Bontang
+                        ©{{ date('Y') }} - Milad RS. Islam Bontang
                     </p>
                 </div>
             </footer>

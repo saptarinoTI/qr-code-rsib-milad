@@ -39,7 +39,7 @@
             <div
                 class="bg-base-100 shadow-base-300/20 z-1 w-full space-y-6 rounded-xl p-6 shadow-md sm:min-w-md lg:p-8">
                 <div class="flex items-center">
-                    <img src="{{ asset('img/LogoMILAD31RSIB.png') }}" alt="" class="w-10" />
+                    <img src="{{ asset('img/LogoMILAD31RSIB.png') }}" alt="" class="w-20" />
                     <h2 class="text-white font-bold leading-none relative top-[8px] text-xl">Milad RSIB</h2>
                 </div>
                 <div>
@@ -71,7 +71,7 @@
                         </div>
                     </form>
                     <p class="text-base-content/50 mt-10 text-xs font-semibold text-center">
-                        ©2025 - Milad RS. Islam Bontang
+                        ©{{ date('Y') }} - Milad RS. Islam Bontang
                     </p>
                 </div>
             </div>

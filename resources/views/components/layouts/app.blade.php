@@ -37,7 +37,7 @@
             <footer class="mx-auto w-full max-w-7xl px-6 py-3.5">
                 <div class="flex items-center justify-between gap-3 text-sm max-lg:flex-col">
                     <p class="text-gray-500 text-center text-sm">
-                        &copy;2025 - Sistem Informasi Bantuan PKT
+                        ©{{ date('Y') }} - Sistem Informasi Bantuan PKT
                     </p>
                 </div>
             </footer>
