@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     /* Data Peserta */
     Route::put('peserta/verif/{id}', [PesertaController::class, 'verif'])->name('peserta.verif');
     Route::post('peserta/sendmass', [PesertaController::class, 'sendMassEmail'])->name('peserta.sendmass');
+    Route::get('peserta/all', [PesertaController::class, 'all'])->name('peserta.all');
     Route::resource('peserta', PesertaController::class)->except('show');
     /* Scan Kehadiran */
     Route::resource('undangan', UndanganController::class)->except('show', 'create', 'edit', 'update', 'destory');

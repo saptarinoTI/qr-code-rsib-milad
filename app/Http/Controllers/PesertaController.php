@@ -105,6 +105,29 @@ class PesertaController extends Controller
         }
     }
 
+    public function all()
+    {
+        $alls = Peserta::all();
+        DB::beginTransaction();
+        try {
+            foreach ($alls as $all) {
+                $all->qr_code = Str::slug($all->nama_karyawan . $all->unit, '-');
+                $all->save();
+            }
+            DB::commit();
+            return to_route('peserta.index')->with([
+                'message' => 'Sukses data berhasil disimpan.',
+                'type' => 'success'
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return to_route('peserta.index')->with([
+                'message' => 'Maaf data gagal disimpan.',
+                'type' => 'error'
+            ]);
+        }
+    }
+
     public function verif($id)
     {
         DB::beginTransaction();
@@ -138,6 +161,12 @@ class PesertaController extends Controller
         $participant = Peserta::findOrFail($id);
 
         $fileName = $participant->qr_code . '.png';
+
+        // dd(
+        //     $participant->qr_code,
+        //     bin2hex($participant->qr_code),
+        //     mb_detect_encoding($participant->qr_code, ['UTF-8', 'ISO-8859-1', 'ASCII'], true)
+        // );
 
         $qrContent = QrCode::format('png')
             ->size(1000)
