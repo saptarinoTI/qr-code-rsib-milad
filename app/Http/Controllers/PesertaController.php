@@ -6,6 +6,7 @@ use App\Jobs\SendQrCodeEmailJob;
 use App\Mail\QrCodeMail;
 use App\Models\Makanan;
 use App\Models\Peserta;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -130,6 +131,16 @@ class PesertaController extends Controller
 
     public function verif($id)
     {
+        dd(Carbon::now());
+        $batasWaktu = \Carbon\Carbon::parse('2026-10-18 08:30:00');
+
+        if (now()->greaterThan($batasWaktu)) {
+            return to_route('peserta.index')->with([
+                'message' => 'Waktu absensi telah berakhir. Absensi hanya dapat dilakukan sampai 18 Oktober 2026 pukul 03:00 WITA.',
+                'type' => 'error'
+            ]);
+        }
+
         DB::beginTransaction();
         try {
             $data = Peserta::findOrFail($id);

@@ -19,6 +19,15 @@ class UndanganController extends Controller
     {
         $data = $request->input('qr_code');
 
+        $batasWaktu = \Carbon\Carbon::parse('2026-10-18 08:30:00');
+
+        if (now()->greaterThan($batasWaktu)) {
+            return to_route('peserta.index')->with([
+                'message' => 'Waktu absensi telah berakhir. Absensi hanya dapat dilakukan sampai 18 Oktober 2026 pukul 03:00 WITA.',
+                'type' => 'error'
+            ]);
+        }
+
         DB::beginTransaction();
         try {
             $peserta = Peserta::where('qr_code', $data)->first();

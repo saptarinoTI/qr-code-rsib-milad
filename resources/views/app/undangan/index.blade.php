@@ -75,7 +75,7 @@
                             Swal.fire({
                                 icon: response.status,
                                 title: "Gagal!",
-                               text: response.message,
+                                text: response.message,
                                 timer: 3500,
                                 // showConfirmButton: false
                             });
