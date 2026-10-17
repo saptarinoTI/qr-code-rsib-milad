@@ -80,25 +80,26 @@
                 0 10px 30px rgba(0, 0, 0, .25);
             transform: rotate(0deg);
             transform-origin: center;
+            will-change: transform;
         }
 
-        #draw-wheel.spinning {
-            transition: transform 5s cubic-bezier(.12, .75, .18, 1);
+        #draw-wheel.is-spinning {
+            animation: doorprize-spin 0.8s linear infinite;
         }
+
+        @keyframes doorprize-spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
 
         .draw-wheel-name {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 42%;
-            color: white;
-            font-size: 11px;
-            font-weight: 800;
-            line-height: 1.2;
-            text-align: right;
-            overflow-wrap: anywhere;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, .7);
-            transform-origin: 0 50%;
+            display: none !important;
         }
 
         .draw-wheel-center {
@@ -129,10 +130,6 @@
         @media (max-width: 480px) {
             .draw-modal-content {
                 padding: 18px 12px;
-            }
-
-            .draw-wheel-name {
-                font-size: 9px;
             }
         }
     </style>
@@ -254,132 +251,94 @@
             const wheel = document.getElementById('draw-wheel');
             const modalStatus = $('#draw-modal-status');
 
+            let wheelAnimation = null;
+
             /*
-             * Membuat daftar nama pada roda.
-             * all_present_names harus berasal dari backend dan hanya
-             * berisi peserta yang belum pernah mendapatkan undian.
+             * Mulai animasi roda tanpa nama peserta.
              */
-            function createDoorprizeWheel(allNames) {
-                $('#draw-wheel .draw-wheel-name').remove();
+            function startWheelAnimation() {
+                wheel.classList.remove('is-spinning');
 
-                const colors = [
-                    '#2563eb',
-                    '#dc2626',
-                    '#16a34a',
-                    '#9333ea',
-                    '#ea580c',
-                    '#0891b2',
-                    '#be123c',
-                    '#4d7c0f',
-                    '#7e22ce',
-                    '#0369a1'
-                ];
+                // Bersihkan transformasi dari animasi sebelumnya.
+                wheel.style.animation = 'none';
+                wheel.style.transition = 'none';
+                wheel.style.transform = 'rotate(0deg)';
 
-                const names = allNames
-                    .map(function(item) {
-                        return typeof item === 'string' ?
-                            item :
-                            (item.nama_karyawan || item.name || '');
-                    })
-                    .filter(Boolean);
+                // Paksa browser menerapkan posisi awal.
+                void wheel.offsetWidth;
 
-                if (names.length === 0) {
-                    wheel.style.background = '#64748b';
-                    return false;
-                }
+                wheel.style.animation = '';
+                wheel.style.transition = '';
+                wheel.classList.add('is-spinning');
 
-                const segment = 360 / names.length;
-
-                const gradient = names.map(function(_, index) {
-                    const start = index * segment;
-                    const end = (index + 1) * segment;
-                    return `${colors[index % colors.length]} ${start}deg ${end}deg`;
-                }).join(', ');
-
-                wheel.style.background = `conic-gradient(${gradient})`;
-
-                names.forEach(function(name, index) {
-                    const label = document.createElement('div');
-
-                    label.className = 'draw-wheel-name';
-                    label.textContent = name;
-
-                    const angle = index * segment + segment / 2;
-
-                    label.style.transform =
-                        `rotate(${angle}deg) translateY(-50%)`;
-
-                    wheel.appendChild(label);
-                });
-
-                return true;
+                // Catat waktu mulai agar durasi animasi dapat dikontrol.
+                wheelAnimation = {
+                    startedAt: Date.now()
+                };
             }
 
             /*
-             * Satu animasi roda untuk seluruh batch undian.
-             * Pemenang tetap menggunakan hasil resmi dari backend.
+             * Hentikan roda dengan perlambatan yang halus.
              */
-            // function spinDoorprizeWheel() {
-            //     return new Promise(function(resolve) {
-            //         wheel.classList.remove('spinning');
-            //         wheel.style.transition = 'none';
-            //         wheel.style.transform = 'rotate(0deg)';
-
-            //         // Memastikan browser menerapkan posisi awal.
-            //         void wheel.offsetWidth;
-
-            //         const randomAngle = Math.floor(Math.random() * 360);
-            //         const finalAngle = 360 * 5 + randomAngle;
-
-            //         wheel.style.transition =
-            //             'transform 5s cubic-bezier(.12, .75, .18, 1)';
-
-            //         wheel.classList.add('spinning');
-            //         wheel.style.transform = `rotate(${finalAngle}deg)`;
-
-            //         window.setTimeout(function() {
-            //             wheel.classList.remove('spinning');
-            //             resolve();
-            //         }, 5100);
-            //     });
-            // }
-            function spinDoorprizeWheel(firstWinnerIndex, totalParticipants) {
+            function stopWheelAnimation() {
                 return new Promise(function(resolve) {
-                    wheel.classList.remove('spinning');
-                    wheel.style.transition = 'none';
-                    wheel.style.transform = 'rotate(0deg)';
+                    if (!wheelAnimation) {
+                        wheel.classList.remove('is-spinning');
+                        resolve();
+                        return;
+                    }
 
-                    // Memastikan browser menerapkan posisi awal.
-                    void wheel.offsetWidth;
+                    const elapsed = Date.now() - wheelAnimation.startedAt;
 
-                    // Sudut setiap segmen roda.
-                    const segmentAngle = 360 / totalParticipants;
-
-                    // Posisi tengah segmen peserta pertama yang menang.
-                    const winnerCenterAngle =
-                        (firstWinnerIndex * segmentAngle) + (segmentAngle / 2);
-
-                    // Panah berada di bagian atas roda (270 derajat).
-                    const targetAngle = (270 - winnerCenterAngle + 360) % 360;
-
-                    // Putar 5 kali penuh lalu berhenti tepat pada pemenang pertama.
-                    const finalAngle = (360 * 5) + targetAngle;
-
-                    wheel.style.transition =
-                        'transform 5s cubic-bezier(.12, .75, .18, 1)';
-
-                    wheel.classList.add('spinning');
-                    wheel.style.transform = `rotate(${finalAngle}deg)`;
+                    // Pastikan animasi utama berlangsung minimal 4,5 detik.
+                    const remaining = Math.max(0, 4500 - elapsed);
 
                     window.setTimeout(function() {
-                        wheel.classList.remove('spinning');
-                        resolve();
-                    }, 5100);
+                        // Ambil posisi visual roda saat ini.
+                        const computedStyle = window.getComputedStyle(wheel);
+                        const matrix = new DOMMatrixReadOnly(computedStyle.transform);
+
+                        let angle = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
+
+                        if (angle < 0) {
+                            angle += 360;
+                        }
+
+                        wheel.classList.remove('is-spinning');
+
+                        // Tetapkan posisi saat ini sebelum transisi perlambatan.
+                        wheel.style.animation = 'none';
+                        wheel.style.transition = 'none';
+                        wheel.style.transform = `rotate(${angle}deg)`;
+
+                        void wheel.offsetWidth;
+
+                        // Putar tambahan dua kali sambil melambat, lalu berhenti.
+                        wheel.style.transition =
+                            'transform 1.2s cubic-bezier(.15, .65, .25, 1)';
+
+                        wheel.style.transform = `rotate(${angle + 720}deg)`;
+
+                        window.setTimeout(function() {
+                            wheel.style.transition = 'none';
+                            wheel.style.animation = 'none';
+                            wheel.style.transform = 'rotate(0deg)';
+
+                            void wheel.offsetWidth;
+
+                            wheel.style.animation = '';
+                            wheel.style.transition = '';
+
+                            wheelAnimation = null;
+                            resolve();
+                        }, 800);
+                    }, remaining);
                 });
             }
 
             /*
-             * Menampilkan semua pemenang sekaligus setelah roda berhenti.
+             * Tampilkan hasil pemenang dari server.
+             * Fungsi ini tidak menentukan pemenang.
              */
             function showAllWinners(winners) {
                 const grid = $('#winner-grid');
@@ -400,16 +359,22 @@
                     });
 
                     $('<div>', {
-                        class: 'name font-semibold'
-                    }).text(winner.nama_karyawan || '').appendTo(card);
+                            class: 'name font-semibold'
+                        })
+                        .text(winner.nama_karyawan || '')
+                        .appendTo(card);
 
                     $('<div>', {
-                        class: 'unit text-sm text-gray-500'
-                    }).text(winner.unit || '').appendTo(card);
+                            class: 'unit text-sm text-gray-500'
+                        })
+                        .text(winner.unit || '')
+                        .appendTo(card);
 
                     $('<div>', {
-                        class: 'no-undian text-sm font-bold mt-1 text-primary'
-                    }).text(`Doorprize: #${noUndian}`).appendTo(card);
+                            class: 'no-undian text-sm font-bold mt-1 text-primary'
+                        })
+                        .text(`Doorprize: #${noUndian}`)
+                        .appendTo(card);
 
                     const actions = $('<div>', {
                         class: 'actions mt-2'
@@ -436,22 +401,37 @@
                 }
             }
 
-            $('#draw-form').submit(function(e) {
+            /*
+             * Proses undian.
+             * Modal dan animasi dimulai sebelum server merespons.
+             */
+            $('#draw-form').on('submit', function(e) {
                 e.preventDefault();
 
-                if (isDrawing) return;
+                if (isDrawing) {
+                    return;
+                }
 
                 const count = parseInt($('#draw-count').val(), 10);
                 const rangeStart = parseInt($('#range-start').val(), 10);
                 const rangeEnd = parseInt($('#range-end').val(), 10);
                 const specificNumber = $('#specific-number').val().trim();
 
-                if (count < 1) {
-                    return alert('Jumlah undian minimal 1!');
+                if (!Number.isInteger(count) || count < 1) {
+                    Swal.fire('Peringatan', 'Jumlah undian minimal 1.', 'warning');
+                    return;
+                }
+
+                if (
+                    !Number.isInteger(rangeStart) ||
+                    !Number.isInteger(rangeEnd)
+                ) {
+                    Swal.fire('Peringatan', 'Rentang nomor undian tidak valid.', 'warning');
+                    return;
                 }
 
                 const formData = {
-                    _token: "{{ csrf_token() }}",
+                    _token: '{{ csrf_token() }}',
                     count: count,
                     range_start: rangeStart,
                     range_end: rangeEnd,
@@ -460,134 +440,117 @@
 
                 isDrawing = true;
 
+                $('#winner-grid').empty();
+                $('#winner-display').text('🎡 Undian sedang diproses...');
+
+                modalStatus.text('Roda sedang berputar. Mohon tunggu...');
+                modal.removeClass('hidden');
+
+                // Animasi langsung dimulai tanpa menunggu AJAX.
+                startWheelAnimation();
+
                 $.ajax({
-                    url: "{{ route('doorprize.store') }}",
-                    method: 'POST',
-                    data: formData,
-                    dataType: 'json',
-
-                    success: async function(data) {
-                        const winners = data.winners || [];
-                        const allNames = data.all_present_names || [];
-
-                        if (winners.length === 0) {
-                            Swal.fire({
-                                icon: 'info',
-                                title: 'Info',
-                                text: 'Tidak ada peserta yang tersedia untuk diundi.'
-                            });
-                            return;
-                        }
-
-                        /*
-                         * Nama pada roda berasal dari all_present_names.
-                         * Pastikan backend hanya mengirim peserta yang
-                         * belum pernah mendapatkan undian.
-                         */
-                        const wheelCreated = createDoorprizeWheel(allNames);
-
-                        if (!wheelCreated) {
-                            Swal.fire({
-                                icon: 'info',
-                                title: 'Info',
-                                text: 'Tidak ada peserta yang tersedia untuk ditampilkan pada roda.'
-                            });
-                            return;
-                        }
-
-                        $('#winner-grid').empty();
-
-                        $('#winner-display').html(
-                            '🎡 Roda sedang berputar...'
-                        );
-
-                        modalStatus.text('Mengundi ' + winners.length + ' pemenang...');
-
-                        modal.removeClass('hidden');
-
+                        url: '{{ route('doorprize.store') }}',
+                        method: 'POST',
+                        data: formData,
+                        dataType: 'json',
+                        timeout: 120000
+                    })
+                    .done(async function(data) {
                         try {
-                            // Hanya satu kali proses putaran untuk satu batch.
-                            // await spinDoorprizeWheel();
-                            const firstWinner = winners[0];
+                            const winners = data.winners || [];
 
-                            const firstWinnerIndex = allNames.findIndex(function(item) {
-                                const participantId = typeof item === 'string' ?
-                                    null :
-                                    item.id;
+                            if (data.status !== 'success' || winners.length === 0) {
+                                await stopWheelAnimation();
+                                modal.addClass('hidden');
 
-                                return participantId !== null &&
-                                    String(participantId) === String(firstWinner.id);
-                            });
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Informasi',
+                                    text: data.message ||
+                                        'Tidak ada peserta yang tersedia untuk diundi.'
+                                });
 
-                            await spinDoorprizeWheel(
-                                firstWinnerIndex >= 0 ? firstWinnerIndex : 0,
-                                allNames.length
-                            );
+                                return;
+                            }
+
+                            modalStatus.text('Sedang menyelesaikan undian...');
+
+                            // Biarkan roda berputar, lalu perlambat hingga berhenti.
+                            await stopWheelAnimation();
 
                             modalStatus.text('Undian selesai!');
 
-                            // Tutup popup setelah roda berhenti.
+                            // Tutup popup dan tampilkan hasil resmi server.
                             modal.addClass('hidden');
-
-                            // Tampilkan seluruh pemenang sekaligus.
                             showAllWinners(winners);
+
                         } catch (error) {
-                            console.error('Animasi undian gagal:', error);
+                            console.error('Kesalahan animasi:', error);
+
+                            wheel.classList.remove('is-spinning');
+                            wheel.style.animation = 'none';
+                            wheel.style.transition = 'none';
+                            wheel.style.transform = 'rotate(0deg)';
+                            wheelAnimation = null;
 
                             modal.addClass('hidden');
 
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'Animasi undian gagal ditampilkan.'
-                            });
+                            // Jika hasil sudah diterima server, tetap tampilkan.
+                            if (Array.isArray(data.winners) && data.winners.length > 0) {
+                                showAllWinners(data.winners);
+                            } else {
+                                Swal.fire(
+                                    'Informasi',
+                                    'Animasi gagal ditampilkan.',
+                                    'warning'
+                                );
+                            }
+                        } finally {
+                            isDrawing = false;
                         }
-                    },
-
-                    error: function(xhr) {
-                        let msg = 'Terjadi kesalahan saat mengambil data undian.';
-
-                        if (xhr.responseJSON && xhr.responseJSON.message) {
-                            msg = xhr.responseJSON.message;
+                    })
+                    .fail(async function(xhr, textStatus) {
+                        try {
+                            await stopWheelAnimation();
+                        } catch (error) {
+                            console.error(error);
                         }
+
+                        modal.addClass('hidden');
+
+                        const message =
+                            xhr.responseJSON?.message ||
+                            (textStatus === 'timeout' ?
+                                'Server membutuhkan waktu terlalu lama. Periksa koneksi dan status undian sebelum mencoba lagi.' :
+                                'Terjadi kesalahan saat mengambil data undian.');
 
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
-                            text: msg
+                            title: 'Undian gagal',
+                            text: message
                         });
-                    },
 
-                    complete: function() {
                         isDrawing = false;
-                    }
-                });
+                    });
             });
 
             /*
-             * Fitur Hangus tetap menggunakan endpoint dan status asli.
+             * Fitur Hangus tetap menggunakan endpoint yang sebelumnya dipakai.
              */
             $(document).on('click', '.mark-hangus', function() {
                 const card = $(this).closest('.card');
                 const id = card.data('id');
-                const status = 'hangus';
 
                 $.ajax({
                     url: `doorprize/updatee/${id}`,
                     method: 'POST',
                     data: {
-                        status: status,
+                        status: 'hangus',
                         _token: '{{ csrf_token() }}'
                     },
-
                     success: function() {
-                        card.find('.status').text(
-                            status.charAt(0).toUpperCase() + status.slice(1)
-                        );
-
-                        if (status === 'hangus') {
-                            card.css('opacity', '0.5');
-                        }
+                        card.css('opacity', '0.5');
 
                         Swal.fire({
                             icon: 'success',
@@ -595,9 +558,12 @@
                             text: 'Undian Doorprize Dibatalkan.'
                         });
                     },
-
                     error: function() {
-                        alert('Gagal update status');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Gagal memperbarui status undian.'
+                        });
                     }
                 });
             });

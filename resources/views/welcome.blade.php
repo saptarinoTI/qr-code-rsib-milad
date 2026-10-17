@@ -138,7 +138,7 @@
                     </svg>
                     Download QRCode
                 </a>
-                <a href="#"
+                <a href="{{ route('historydoorprize') }}"
                     class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white border border-slate-300 text-slate-700 hover:text-primary-600 font-heading font-medium text-sm tracking-normal hover:border-primary-500 transition-all flex items-center justify-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                         fill="none" stroke-width="1.5" class="solar solar-history-bold-duotone">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HasilUndian;
 use App\Models\Peserta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,14 @@ class HomeController extends Controller
     {
         $datas = Peserta::orderBy('nama_karyawan')->get();
         return view("downloadqrcode", compact("datas"));
+    }
+
+    public function historydoorprize()
+    {
+        $datas = HasilUndian::with('peserta')
+            ->orderByRaw('CAST(no_undian AS UNSIGNED) ASC')
+            ->get();
+        return view("historydoorprize", compact("datas"));
     }
 
     public function login()

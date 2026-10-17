@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Mail;
 
 Route::get('/', [HomeController::class, 'index'])->name('landing');
 Route::get('/download/qrcode', [HomeController::class, 'downloadqrcode'])->name('downloadqrcode');
+Route::get('/history/doorprize', [HomeController::class, 'historydoorprize'])->name('historydoorprize');
 Route::get('peserta/qrgenerate/{id}', [PesertaController::class, 'generate'])->name('peserta.qrgenerate');
 
 Route::middleware(['guest'])->group(function () {

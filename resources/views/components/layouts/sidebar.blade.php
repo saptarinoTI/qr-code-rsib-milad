@@ -7,7 +7,7 @@
                  aria-label="Close" data-overlay="#layout-toggle">
                  <span class="icon-[tabler--x] size-5"></span>
              </button>
-             <a href="{{ route('login') }}" class="flex items-center justify-start px-6 gap-1 mt-5 mb-1">
+             <a href="{{ route('landing') }}" class="flex items-center justify-start px-6 gap-1 mt-5 mb-1">
                  <img src="{{ asset('img/LogoMILAD31RSIB.png') }}" alt="" class="w-6" />
                  <h2 class="text-base-content font-bold leading-none relative top-[4px]">Milad RSIB</h2>
              </a>
