@@ -8,6 +8,7 @@ use App\Models\Makanan;
 use App\Models\Peserta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -181,18 +182,66 @@ class PesertaController extends Controller
         // }
 
         // return back()->with('success', 'Email massal berhasil dikirim ke semua peserta!');
-        ini_set('max_execution_time', 500); // 500 detik = 8 menit
+        // ini_set('max_execution_time', 500); // 500 detik = 8 menit
 
-        $pesertas = Peserta::get();
+        // // $pesertas = Peserta::get();
+        // $pesertas = Peserta::whereIn('id', [307, 54])
+        //     ->whereNotNull('email')
+        //     ->get();
+
+        // foreach ($pesertas as $peserta) {
+        //     if ($peserta->email) {
+        //         // Menambahkan job ke dalam queue untuk setiap peserta
+        //         // SendQrCodeEmailJob::dispatch($peserta, $peserta->qr_code);
+        //         dispatch(new SendQrCodeEmailJob($peserta, $peserta->qr_code));
+        //     }
+        // }
+
+        // return back()->with('success', 'Email massal sedang dikirim melalui queue!');
+
+        ini_set('max_execution_time', 500);
+
+        $pesertas = Peserta::whereNotNull('email')
+            ->where('email', '!=', '')
+            ->get();
+
+        $berhasil = 0;
+        $gagal = 0;
+        $detailError = [];
 
         foreach ($pesertas as $peserta) {
-            if ($peserta->email) {
-                // Menambahkan job ke dalam queue untuk setiap peserta
-                // SendQrCodeEmailJob::dispatch($peserta, $peserta->qr_code);
-                dispatch(new SendQrCodeEmailJob($peserta, $peserta->qr_code));
+            try {
+                dispatch(new SendQrCodeEmailJob(
+                    $peserta,
+                    $peserta->qr_code
+                ));
+
+                $berhasil++;
+
+                Log::info('Email peserta masuk ke queue', [
+                    'peserta_id' => $peserta->id,
+                    'email' => $peserta->email,
+                ]);
+            } catch (\Throwable $e) {
+                $gagal++;
+
+                $detailError[] = "Peserta ID {$peserta->id}: {$e->getMessage()}";
+
+                Log::error('Gagal memasukkan email peserta ke queue', [
+                    'peserta_id' => $peserta->id,
+                    'email' => $peserta->email,
+                    'error' => $e->getMessage(),
+                ]);
             }
         }
 
-        return back()->with('success', 'Email massal sedang dikirim melalui queue!');
+        $message = "Queue berhasil: {$berhasil}, gagal memasukkan ke queue: {$gagal}.";
+
+        if ($detailError) {
+            return back()->with('error', $message)
+                ->with('detail_error', $detailError);
+        }
+
+        return back()->with('success', $message);
     }
 }

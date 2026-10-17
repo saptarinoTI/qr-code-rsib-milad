@@ -11,6 +11,20 @@ use App\Http\Controllers\PesertaController;
 use App\Http\Controllers\UndanganController;
 use App\Http\Controllers\UndianController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+
+
+// Route::get('/test-email', function () {
+//     Mail::raw(
+//         'Ini adalah email percobaan dari aplikasi Laravel.',
+//         function ($message) {
+//             $message->to('saptarino708@gmail.com')
+//                 ->subject('Test Email Laravel');
+//         }
+//     );
+
+//     return 'Email berhasil dikirim.';
+// });
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('login');

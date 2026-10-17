@@ -12,6 +12,7 @@ class Peserta extends Model
     protected $fillable = [
         "nama_karyawan",
         "unit",
+        "email",
         "qr_code",
         "status_hadir",
         "sudah_ikut_undian",

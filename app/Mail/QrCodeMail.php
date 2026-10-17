@@ -50,8 +50,14 @@ class QrCodeMail extends Mailable implements ShouldQueue
 
     public function build()
     {
+        // return $this->subject('QR Code Absensi ' . $this->peserta->nama_karyawan)
+        //     ->markdown('emails.qrcode')
+        //     ->attach(storage_path('app/public/' . $this->qrPath), [
+        //         'as' => 'qrcode.png',
+        //         'mime' => 'image/png',
+        //     ]);
         return $this->subject('QR Code Absensi ' . $this->peserta->nama_karyawan)
-            ->markdown('emails.qrcode')
+            ->view('emails.qrcode')
             ->attach(storage_path('app/public/' . $this->qrPath), [
                 'as' => 'qrcode.png',
                 'mime' => 'image/png',
