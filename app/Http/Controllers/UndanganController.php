@@ -19,12 +19,46 @@ class UndanganController extends Controller
     {
         $data = $request->input('qr_code');
 
-        $batasWaktu = \Carbon\Carbon::parse('2026-10-18 08:30:00');
+        $slugBatasJam10 = [
+            'vira-fatmawati-amdkepinstalasi-rawat-inap-vip',
+            'miftahul-riski-a-mdkebinstalasi-rawat-inap-vip',
+            'aidha-strkepinstalasi-high-care',
+            'arinda-sri-wahyuni-amdkepinstalasi-high-care',
+            'ita-wahyuni-oemardi-skepnsinstalasi-rawat-inap-3-jabal',
+            'indah-lestari-amdkepinstalasi-rawat-inap-3-jabal',
+            'perawat-baru-hersantiinstalasi-rawat-inap-3-jabal',
+            'bdn-jumiati-l-skebinstalasi-mother-and-baby-care',
+            'anggita-oktaviana-amdkebinstalasi-mother-and-baby-care',
+            'imaniar-juniati-amd-kebinstalasi-mother-and-baby-care',
+            'lilik-nur-safitri-amdkepinstalasi-rawat-inap-2-raodah',
+            'viola-larasati-sukma-amdkepinstalasi-rawat-inap-2-raodah',
+            'mirza-wati-amd-kepinstalasi-rawat-inap-1-multazam',
+            'nurzakia-firdaus-amdkepinstalasi-rawat-inap-1-multazam',
+            'tri-purwaning-tyascssd',
+            'rezky-amalia-amdkebinstalasi-rawat-inap-vvip-grand-vvip',
+            'nuraeniamdkepinstalasi-rawat-inap-vvip-grand-vvip',
+            'dr-fina-sulistiawatiinstalasi-rawat-inap',
+            'dr-bacharuddin-jusuf-amiruddininstalasi-gawat-darurat',
+            'firda-dwi-lestari-amdkepinstalasi-gawat-darurat',
+            'renaldi-wahyu-aprian-amdkepinstalasi-gawat-darurat',
+            'ns-kamila-skepinstalasi-gawat-darurat',
+        ];
+
+        // Tentukan batas waktu berdasarkan slug peserta.
+        $jamBatas = in_array($data, $slugBatasJam10, true)
+            ? '10:00:00'
+            : '08:30:00';
+
+        $batasWaktu = \Carbon\Carbon::parse(
+            '2026-10-18 ' . $jamBatas,
+            'Asia/Makassar'
+        );
 
         if (now()->greaterThan($batasWaktu)) {
-            return to_route('peserta.index')->with([
-                'message' => 'Waktu absensi telah berakhir. Absensi hanya dapat dilakukan sampai 18 Oktober 2026 pukul 03:00 WITA.',
-                'type' => 'error'
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Maaf!, Waktu absensi telah berakhir...',
+                'data' => $data,
             ]);
         }
 
