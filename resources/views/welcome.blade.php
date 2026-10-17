@@ -12,73 +12,306 @@
 </head>
 
 <body>
-    <div
-        class="flex h-auto min-h-screen items-center justify-center overflow-x-hidden bg-[url('https://cdn.flyonui.com/fy-assets/blocks/marketing-ui/auth/auth-background-2.png')] bg-cover bg-center bg-no-repeat py-10">
-        <div class="relative flex items-center justify-center px-4 sm:px-6 lg:px-8">
-            <div class="absolute">
-                <svg width="612" height="697" viewBox="0 0 612 697" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M97.4387 622.042C96.3793 621.236 95.3369 620.415 94.3115 619.58L93.9959 619.968C91.9211 618.28 89.9158 616.536 87.9805 614.74L88.3206 614.374C86.3673 612.562 84.4856 610.697 82.6761 608.783L82.3128 609.127C80.4764 607.185 78.7139 605.193 77.026 603.154L77.4111 602.836C75.7156 600.788 74.0956 598.694 72.5516 596.557L72.1463 596.85C70.5835 594.687 69.0983 592.481 67.6913 590.235L68.1149 589.97C66.7047 587.719 65.3733 585.429 64.1214 583.104L63.6812 583.341C62.4181 580.995 61.2356 578.613 60.1343 576.2L60.5891 575.992C59.4876 573.579 58.4677 571.134 57.5299 568.663L57.0624 568.84C56.1179 566.351 55.2564 563.834 54.4784 561.295L54.9565 561.149C54.1802 558.615 53.4874 556.058 52.8788 553.483L52.3922 553.598C51.7803 551.01 51.2531 548.403 50.8112 545.782L51.3042 545.698C50.864 543.087 50.5087 540.462 50.2391 537.828L49.7417 537.879C49.4712 535.235 49.2865 532.581 49.1884 529.923L49.688 529.904C49.5905 527.26 49.5788 524.612 49.6538 521.963L49.154 521.949C49.2291 519.294 49.3908 516.639 49.6397 513.988L50.1375 514.035C50.3847 511.403 50.7182 508.775 51.1386 506.156L50.6449 506.076C51.0653 503.457 51.5723 500.847 52.1664 498.25L52.6538 498.361C53.2426 495.787 53.9175 493.225 54.6788 490.681L54.1998 490.537C54.9594 487.999 55.8049 485.477 56.7366 482.977L57.2052 483.151C58.1257 480.681 59.1309 478.232 60.2213 475.807L59.7653 475.602C60.8508 473.188 62.0203 470.799 63.2746 468.439L63.7161 468.674C64.9519 466.348 66.2703 464.05 67.6717 461.784L67.2465 461.521C68.635 459.276 70.1047 457.062 71.6561 454.883L72.0634 455.173C72.8302 454.096 73.6169 453.027 74.4238 451.968L76.8308 448.808L76.4331 448.505L81.2471 442.184L81.6449 442.487L86.4589 436.166L86.0611 435.863L90.8752 429.542L91.273 429.845L96.087 423.524L95.6892 423.221L100.503 416.9L100.901 417.203L105.715 410.882L105.317 410.58L110.131 404.259L110.529 404.562L115.343 398.241L114.945 397.938L119.759 391.617L120.157 391.92L124.971 385.599L124.574 385.296L129.388 378.975L129.785 379.278L134.599 372.957L134.202 372.654L139.016 366.334L139.413 366.637L144.227 360.316L143.83 360.013L148.644 353.692L149.042 353.995L153.856 347.674L153.458 347.371L158.272 341.05L158.67 341.353L163.484 335.032L163.086 334.729L167.9 328.409L168.298 328.711L173.112 322.391L172.714 322.088L177.528 315.767L177.926 316.07L182.74 309.749L182.342 309.446L187.156 303.125L187.554 303.428L192.368 297.107L191.97 296.804L196.784 290.483L197.182 290.786L201.996 284.465L201.598 284.163L206.412 277.842L206.81 278.145L211.624 271.824L211.226 271.521L216.04 265.2L216.438 265.503L221.252 259.182L220.854 258.879L225.669 252.558L226.066 252.861L230.88 246.54L230.483 246.237L235.297 239.917L235.694 240.22L240.508 233.899L240.111 233.596L244.925 227.275L245.322 227.578L250.136 221.257L249.739 220.954L254.553 214.633L254.951 214.936L259.765 208.615L259.367 208.312L264.181 201.992L264.579 202.294L269.393 195.974L268.995 195.671L273.809 189.35L274.207 189.653L279.021 183.332L278.623 183.029L283.437 176.708L283.835 177.011L288.649 170.69L288.251 170.387L293.065 164.067L293.463 164.369L298.277 158.049L297.879 157.746L302.693 151.425L303.091 151.728L307.905 145.407L307.507 145.104L312.321 138.783L312.719 139.086L317.533 132.765L317.135 132.462L321.949 126.141L322.347 126.444L327.161 120.124L326.763 119.821L331.577 113.5L331.975 113.803L336.789 107.482L336.391 107.179L341.205 100.858L341.603 101.161L344.01 98.0005C344.817 96.9411 345.638 95.8986 346.473 94.8733L346.085 94.5577C347.773 92.4829 349.517 90.4776 351.312 88.5423L351.679 88.8823C353.491 86.929 355.356 85.0474 357.269 83.2379L356.926 82.8746C358.868 81.0382 360.86 79.2757 362.898 77.5878L363.217 77.9729C365.265 76.2773 367.359 74.6573 369.496 73.1134L369.203 72.7081C371.366 71.1452 373.572 69.66 375.817 68.253L376.083 68.6767C378.333 67.2665 380.624 65.9351 382.949 64.6832L382.712 64.243C385.058 62.9799 387.44 61.7974 389.853 60.696L390.061 61.1509C392.474 60.0494 394.919 59.0295 397.39 58.0917L397.213 57.6242C399.702 56.6797 402.219 55.8182 404.758 55.0402L404.904 55.5183C407.438 54.742 409.995 54.0493 412.569 53.4406L412.454 52.954C415.043 52.3421 417.65 51.8149 420.271 51.373L420.354 51.866C422.966 51.4258 425.591 51.0705 428.225 50.8009L428.174 50.3035C430.818 50.033 433.472 49.8483 436.13 49.7502L436.149 50.2498C438.792 50.1523 441.441 50.1406 444.09 50.2156L444.104 49.7158C446.759 49.7909 449.414 49.9526 452.065 50.2015L452.018 50.6993C454.65 50.9465 457.278 51.28 459.897 51.7004L459.976 51.2068C462.595 51.6272 465.206 52.1341 467.803 52.7282L467.692 53.2156C470.266 53.8045 472.828 54.4793 475.372 55.2407L475.516 54.7617C478.054 55.5213 480.576 56.3667 483.076 57.2985L482.902 57.767C485.372 58.6875 487.821 59.6927 490.246 60.7831L490.451 60.3271C492.864 61.4126 495.253 62.5822 497.614 63.8364L497.379 64.2779C499.705 65.5138 502.003 66.8321 504.269 68.2336L504.532 67.8083C506.777 69.1968 508.991 70.6665 511.17 72.218L510.88 72.6253C511.957 73.392 513.025 74.1788 514.085 74.9856C515.144 75.7925 516.187 76.6134 517.212 77.4478L517.528 77.06C519.602 78.7485 521.608 80.4923 523.543 82.2877L523.203 82.6542C525.156 84.4663 527.038 86.331 528.847 88.2446L529.211 87.9011C531.047 89.8432 532.81 91.8354 534.498 93.8737L534.112 94.1926C535.808 96.2401 537.428 98.3342 538.972 100.471L539.377 100.178C540.94 102.341 542.425 104.547 543.832 106.793L543.409 107.058C544.819 109.309 546.15 111.599 547.402 113.924L547.842 113.687C549.105 116.033 550.288 118.415 551.389 120.828L550.934 121.036C552.036 123.449 553.056 125.894 553.994 128.366L554.461 128.188C555.406 130.677 556.267 133.194 557.045 135.733L556.567 135.88C557.343 138.413 558.036 140.97 558.645 143.545L559.131 143.43C559.743 146.018 560.27 148.626 560.712 151.247L560.219 151.33C560.66 153.941 561.015 156.566 561.284 159.2L561.782 159.149C562.052 161.794 562.237 164.447 562.335 167.105L561.836 167.124C561.933 169.768 561.945 172.416 561.87 175.065L562.37 175.08C562.294 177.734 562.133 180.389 561.884 183.04L561.386 182.993C561.139 185.625 560.805 188.253 560.385 190.872L560.879 190.952C560.458 193.571 559.951 196.181 559.357 198.778L558.87 198.667C558.281 201.241 557.606 203.803 556.845 206.347L557.324 206.491C556.564 209.029 555.719 211.551 554.787 214.052L554.318 213.877C553.398 216.347 552.393 218.797 551.302 221.221L551.758 221.426C550.673 223.84 549.503 226.229 548.249 228.589L547.807 228.354C546.572 230.68 545.253 232.978 543.852 235.244L544.277 235.507C542.889 237.752 541.419 239.966 539.867 242.145L539.46 241.855C538.693 242.932 537.907 244.001 537.1 245.06L534.693 248.221L535.09 248.523L530.276 254.844L529.879 254.541L525.065 260.862L525.462 261.165L520.648 267.486L520.251 267.183L515.437 273.504L515.834 273.807L511.02 280.128L510.622 279.825L505.808 286.146L506.206 286.449L501.392 292.769L500.994 292.466L496.18 298.787L496.578 299.09L491.764 305.411L491.366 305.108L486.552 311.429L486.95 311.732L482.136 318.053L481.738 317.75L476.924 324.071L477.322 324.374L472.508 330.695L472.11 330.392L467.296 336.712L467.694 337.015L462.88 343.336L462.482 343.033L457.668 349.354L458.066 349.657L453.252 355.978L452.854 355.675L448.04 361.996L448.438 362.299L443.624 368.62L443.226 368.317L438.412 374.638L438.81 374.94L433.996 381.261L433.598 380.958L428.784 387.279L429.181 387.582L424.367 393.903L423.97 393.6L419.156 399.921L419.553 400.224L414.739 406.545L414.342 406.242L409.527 412.563L409.925 412.866L405.111 419.186L404.713 418.883L399.899 425.204L400.297 425.507L395.483 431.828L395.085 431.525L390.271 437.846L390.669 438.149L385.855 444.47L385.457 444.167L380.643 450.488L381.041 450.791L376.227 457.112L375.829 456.809L371.015 463.129L371.413 463.432L366.599 469.753L366.201 469.45L361.387 475.771L361.785 476.074L356.971 482.395L356.573 482.092L351.759 488.413L352.157 488.716L347.343 495.037L346.945 494.734L342.131 501.054L342.529 501.357L337.715 507.678L337.317 507.375L332.503 513.696L332.901 513.999L328.087 520.32L327.689 520.017L322.875 526.338L323.273 526.641L318.458 532.962L318.061 532.659L313.247 538.98L313.644 539.282L308.83 545.603L308.433 545.3L303.619 551.621L304.016 551.924L299.202 558.245L298.805 557.942L293.99 564.263L294.388 564.566L289.574 570.887L289.176 570.584L284.362 576.905L284.76 577.207L279.946 583.528L279.548 583.225L274.734 589.546L275.132 589.849L270.318 596.17L269.92 595.867L267.513 599.028C266.706 600.087 265.885 601.129 265.051 602.155L265.439 602.47C263.75 604.545 262.007 606.551 260.211 608.486L259.845 608.146C258.033 610.099 256.168 611.981 254.254 613.79L254.598 614.154C252.656 615.99 250.663 617.752 248.625 619.44L248.306 619.055C246.259 620.751 244.165 622.371 242.028 623.915L242.321 624.32C240.158 625.883 237.952 627.368 235.706 628.775L235.441 628.351C233.19 629.762 230.9 631.093 228.575 632.345L228.812 632.785C226.465 634.048 224.084 635.231 221.671 636.332L221.463 635.877C219.05 636.979 216.605 637.999 214.133 638.936L214.311 639.404C211.821 640.348 209.305 641.21 206.766 641.988L206.619 641.51C204.085 642.286 201.529 642.979 198.954 643.587L199.069 644.074C196.48 644.686 193.873 645.213 191.252 645.655L191.169 645.162C188.558 645.602 185.933 645.958 183.299 646.227L183.349 646.725C180.705 646.995 178.052 647.18 175.393 647.278L175.375 646.778C172.731 646.876 170.082 646.887 167.433 646.813L167.419 647.312C164.765 647.237 162.11 647.075 159.459 646.827L159.506 646.329C156.874 646.082 154.246 645.748 151.626 645.328L151.547 645.821C148.928 645.401 146.318 644.894 143.72 644.3L143.832 643.812C141.257 643.224 138.696 642.549 136.151 641.787L136.008 642.266C133.469 641.507 130.948 640.661 128.447 639.73L128.622 639.261C126.152 638.341 123.702 637.335 121.278 636.245L121.073 636.701C118.659 635.616 116.27 634.446 113.91 633.192L114.144 632.75C111.819 631.514 109.521 630.196 107.255 628.795L106.992 629.22C104.747 627.831 102.533 626.362 100.354 624.81L100.644 624.403C99.5665 623.636 98.4981 622.849 97.4387 622.042Z"
-                        stroke="var(--color-primary)" stroke-opacity="0.3" stroke-dasharray="8 8" />
-                    <path
-                        d="M360.405 111.996C393.955 67.9448 456.863 59.4318 500.914 92.9818V92.9818C544.965 126.532 553.478 189.44 519.928 233.491L250.545 587.191C216.995 631.243 154.087 639.756 110.036 606.206V606.206C65.9845 572.656 57.4716 509.747 91.0216 465.696L360.405 111.996Z"
-                        fill="url(#paint0_linear_13715_136336)" fill-opacity="0.08" />
-                    <path
-                        d="M519.53 233.188L250.147 586.888C216.765 630.72 154.17 639.19 110.339 605.808C66.5071 572.425 58.0367 509.831 91.4194 465.999L360.802 112.299C394.185 68.4674 456.78 59.9969 500.611 93.3796C544.443 126.762 552.913 189.357 519.53 233.188Z"
-                        stroke="var(--color-primary)" stroke-opacity="0.2" />
-                    <defs>
-                        <linearGradient id="paint0_linear_13715_136336" x1="500.914" y1="92.9818" x2="110.036"
-                            y2="606.206" gradientUnits="userSpaceOnUse">
-                            <stop offset="0" stop-color="var(--color-primary)" />
-                            <stop offset="1" stop-color="var(--color-primary)" stop-opacity="0.2" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-            </div>
-            <div
-                class="bg-base-100 shadow-base-300/20 z-1 w-full space-y-6 rounded-xl p-6 shadow-md sm:min-w-md lg:p-8">
-                <div class="flex items-center">
-                    <img src="{{ asset('img/LogoMILAD31RSIB.png') }}" alt="" class="w-20" />
-                    <h2 class="text-white font-bold leading-none relative top-[8px] text-xl">Milad RSIB</h2>
-                </div>
-                <div>
-                    <h3 class="text-base-content text-xl mb-1 font-bold">Selamat datang</h3>
-                    <p class="text-base-content/80 text-sm font-medium">Masukkan Kredensial Anda untuk mengakses
-                        akun Anda.</p>
+
+    <header class="w-full fixed top-0 z-40 bg-transparent transition-all duration-300 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center justify-center space-x-1.5 cursor-pointer"
+                    onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                    <i data-lucide="sparkles" class="h-4 w-4 text-accent-amber"></i>
+
+                    <h1
+                        class="font-heading text-sm font-bold tracking-wider text-primary-50 transition-colors duration-300">
+                        Milad 32 - RS Islam Bontang
+                    </h1>
                 </div>
 
-                <div class="space-y-4">
-                    <form class="mb-4 space-y-3" method="post" action="{{ route('login.post') }}">
-                        @csrf
-                        <div>
-                            <label class="label-text font-medium text-sm" for="userUsername">Username</label>
-                            <input type="text" placeholder="Masukkan username" class="input font-medium text-sm"
-                                id="userUsername" name="username" required autocomplete="off" />
-                            @error('username')
-                                <div class="font-medium mt-1 text-sm text-red-400">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div>
-                            <label class="label-text font-medium text-sm" for="userPassword">Kata sandi</label>
-                            <input type="password" placeholder="**************" class="input font-medium text-sm"
-                                id="userPassword" name="password" required />
-                        </div>
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex text-sm font-medium text-primary-50">
+                    <a href="#beranda"
+                        class="px-3.5 py-2 rounded-lg hover:text-primary-500 hover:bg-primary-50 text-sm transition">Beranda</a>
+                    <a href="{{ route('downloadqrcode') }}"
+                        class="px-3.5 py-2 rounded-lg hover:text-primary-500 hover:bg-primary-50 text-sm transition">Download
+                        QRCode</a>
+                    <a href="#doorprize"
+                        class="px-3.5 py-2 rounded-lg hover:text-primary-500 hover:bg-primary-50 text-sm transition">History
+                        Doorprize</a>
+                    <a href="{{ route('login') }}"
+                        class="px-3.5 py-2 rounded-lg bg-primary-500 text-primary-50 transition">Masuk</a>
+                </nav>
 
-                        <div class="mt-6">
-                            <button type="submit"
-                                class="btn btn-sm py-3 btn-primary btn-gradient btn-block">Masuk</button>
-                        </div>
-                    </form>
-                    <p class="text-base-content/50 mt-10 text-xs font-semibold text-center">
-                        ©{{ date('Y') }} - Milad RS. Islam Bontang
-                    </p>
+                <!-- Mobile Menu Button -->
+                <div class="flex md:hidden">
+                    <button id="mobile-menu-btn"
+                        class="p-2 rounded-lg text-primary-50 hover:text-primary-600 hover:bg-primary-50 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none" stroke-width="1.5"
+                            class="solar solar-widget-3-bold-duotone text-white hover:text-teal-700">
+                            <g
+                                style="color: var(--solar-secondary-color, currentColor); opacity: var(--solar-secondary-opacity, 0.5)">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M1.75 6.5C1.75 3.87665 3.87665 1.75 6.5 1.75C9.12335 1.75 11.25 3.87665 11.25 6.5C11.25 9.12335 9.12335 11.25 6.5 11.25C3.87665 11.25 1.75 9.12335 1.75 6.5Z"
+                                    fill="currentColor"
+                                    style="color: var(--solar-secondary-color, currentColor); opacity: var(--solar-secondary-opacity, 0.5)" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M12.75 17.5C12.75 14.8766 14.8766 12.75 17.5 12.75C20.1234 12.75 22.25 14.8766 22.25 17.5C22.25 20.1234 20.1234 22.25 17.5 22.25C14.8766 22.25 12.75 20.1234 12.75 17.5Z"
+                                    fill="currentColor"
+                                    style="color: var(--solar-secondary-color, currentColor); opacity: var(--solar-secondary-opacity, 0.5)" />
+                            </g>
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M22.25 6.5C22.25 3.87665 20.1234 1.75 17.5 1.75C14.8766 1.75 12.75 3.87665 12.75 6.5C12.75 9.12335 14.8766 11.25 17.5 11.25C20.1234 11.25 22.25 9.12335 22.25 6.5Z"
+                                fill="currentColor" />
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M11.25 17.5C11.25 14.8766 9.12335 12.75 6.5 12.75C3.87665 12.75 1.75 14.8766 1.75 17.5C1.75 20.1234 3.87665 22.25 6.5 22.25C9.12335 22.25 11.25 20.1234 11.25 17.5Z"
+                                fill="currentColor" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-2 shadow-xl">
+            <a href="#beranda"
+                class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-500">Beranda</a>
+            <a href="#qrcode"
+                class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-500">Download
+                QRCode</a>
+            <a href="#doorprize"
+                class="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-primary-50 hover:text-primary-500">History
+                Doorprize</a>
+            <a href="{{ route('login') }}"
+                class="block px-3 py-2 rounded-md bg-sm font-medium bg-slate-700 hover:text-primary-50 hover:bg-primary-500">Masuk</a>
+        </div>
+    </header>
+
+
+    <section id="beranda"
+        class="font-white gradient-hero relative py-24 lg:py-36 overflow-hidden min-h-screen flex items-center">
+        <!-- Radial Spotlight Glow -->
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-primary-500/10 rounded-full blur-[140px] pointer-events-none">
+        </div>
+
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+
+            <!-- Sub-Badge -->
+            <div data-aos="fade-down"
+                class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-transparent border border-primary-500/35 text-primary-100/70 text-xs font-medium tracking-wider uppercase mb-8">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary-100/70 animate-ping"></span>
+                MILAD KE-32 RS ISLAM BONTANG
+            </div>
+
+            <!-- Professional Headline -->
+            <h1 data-aos="fade-up" data-aos-delay="100"
+                class="text-3xl sm:text-4xl lg:text-5xl font-heading font-black text-primary-50 leading-tight tracking-tight mb-8">
+                Merayakan Kebersamaan, <br class="hidden sm:block" />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-100 via-teal-500 to-amber-600">
+                    Mengabdi dengan Sepenuh Hati.
+                </span>
+            </h1>
+
+            <!-- Narrative Subtext -->
+            <p data-aos="fade-up" data-aos-delay="200"
+                class="text-sm md:text-base text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed mb-10">
+                Rayakan perjalanan dan kebersamaan dalam Milad Rumah Sakit Islam Bontang Ke-32.
+                Pererat silaturahmi, tingkatkan solidaritas, dan kobarkan semangat untuk terus
+                berkarya serta memberikan pelayanan terbaik dengan sepenuh hati.
+            </p>
+
+            <!-- Hero Action CTA Buttons -->
+            <div data-aos="fade-up" data-aos-delay="300"
+                class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="{{ route('downloadqrcode') }}"
+                    class="w-full sm:w-auto px-8 py-4 rounded-xl bg-primary-500 text-white font-heading font-medium text-sm tracking-normal hover:bg-primary-600 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke-width="1.5" class="solar solar-download-minimalistic-bold-duotone">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M3 14.25C3.41421 14.25 3.75 14.5858 3.75 15C3.75 16.4354 3.75159 17.4365 3.85315 18.1919C3.9518 18.9257 4.13225 19.3142 4.40901 19.591C4.68577 19.8678 5.07435 20.0482 5.80812 20.1469C6.56347 20.2484 7.56459 20.25 9 20.25H15C16.4354 20.25 17.4365 20.2484 18.1919 20.1469C18.9257 20.0482 19.3142 19.8678 19.591 19.591C19.8678 19.3142 20.0482 18.9257 20.1469 18.1919C20.2484 17.4365 20.25 16.4354 20.25 15C20.25 14.5858 20.5858 14.25 21 14.25C21.4142 14.25 21.75 14.5858 21.75 15V15.0549C21.75 16.4225 21.75 17.5248 21.6335 18.3918C21.5125 19.2919 21.2536 20.0497 20.6517 20.6516C20.0497 21.2536 19.2919 21.5125 18.3918 21.6335C17.5248 21.75 16.4225 21.75 15.0549 21.75H8.94513C7.57754 21.75 6.47522 21.75 5.60825 21.6335C4.70814 21.5125 3.95027 21.2536 3.34835 20.6517C2.74643 20.0497 2.48754 19.2919 2.36652 18.3918C2.24996 17.5248 2.24998 16.4225 2.25 15.0549C2.25 15.0366 2.25 15.0183 2.25 15C2.25 14.5858 2.58579 14.25 3 14.25Z"
+                            fill="currentColor"
+                            style="color: var(--solar-secondary-color, currentColor); opacity: var(--solar-secondary-opacity, 0.5)" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M12 16.75C12.2106 16.75 12.4114 16.6615 12.5535 16.5061L16.5535 12.1311C16.833 11.8254 16.8118 11.351 16.5061 11.0715C16.2004 10.792 15.726 10.8132 15.4465 11.1189L12.75 14.0682V3C12.75 2.58579 12.4142 2.25 12 2.25C11.5858 2.25 11.25 2.58579 11.25 3V14.0682L8.55353 11.1189C8.27403 10.8132 7.79963 10.792 7.49393 11.0715C7.18823 11.351 7.16698 11.8254 7.44648 12.1311L11.4465 16.5061C11.5886 16.6615 11.7894 16.75 12 16.75Z"
+                            fill="currentColor" />
+                    </svg>
+                    Download QRCode
+                </a>
+                <a href="#"
+                    class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white border border-slate-300 text-slate-700 hover:text-primary-600 font-heading font-medium text-sm tracking-normal hover:border-primary-500 transition-all flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke-width="1.5" class="solar solar-history-bold-duotone">
+                        <path
+                            d="M12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V11.6893L15.0303 13.9697C15.3232 14.2626 15.3232 14.7374 15.0303 15.0303C14.7374 15.3232 14.2626 15.3232 13.9697 15.0303L11.5429 12.6036C11.3554 12.416 11.25 12.1617 11.25 11.8964V8C11.25 7.58579 11.5858 7.25 12 7.25Z"
+                            fill="currentColor"
+                            style="color: var(--solar-secondary-color, currentColor); opacity: var(--solar-secondary-opacity, 0.5)" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M5.07868 5.06891C8.87402 1.27893 15.0437 1.31923 18.8622 5.13778C22.6824 8.95797 22.7211 15.1313 18.9262 18.9262C15.1312 22.7211 8.95793 22.6824 5.13774 18.8622C2.87389 16.5984 1.93904 13.5099 2.34047 10.5812C2.39672 10.1708 2.775 9.88377 3.18537 9.94002C3.59575 9.99627 3.88282 10.3745 3.82658 10.7849C3.4866 13.2652 4.27782 15.881 6.1984 17.8016C9.44288 21.0461 14.6664 21.0646 17.8655 17.8655C21.0646 14.6664 21.046 9.44292 17.8015 6.19844C14.5587 2.95561 9.33889 2.93539 6.13935 6.12957L6.88705 6.13333C7.30126 6.13541 7.63535 6.47288 7.63327 6.88709C7.63119 7.3013 7.29372 7.63539 6.87951 7.63331L4.33396 7.62052C3.92269 7.61845 3.58981 7.28556 3.58774 6.8743L3.57495 4.32874C3.57286 3.91454 3.90696 3.57707 4.32117 3.57498C4.73538 3.5729 5.07285 3.907 5.07493 4.32121L5.07868 5.06891Z"
+                            fill="currentColor" />
+                    </svg>
+                    History Doorprize
+                </a>
+            </div>
+
+        </div>
+    </section>
+
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    <script>
+        // Tutup menu setelah link diklik
+        document.querySelectorAll('#mobile-menu a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+
+            if (!header) return;
+
+            // =========================
+            // Navbar Scroll Effect
+            // =========================
+            const handleNavbarScroll = () => {
+                const isScrolled = window.scrollY > 20;
+
+                const logo = header.querySelector('h1');
+                const logoIcon = header.querySelector('[data-lucide="sparkles"]');
+
+                const desktopLinks = header.querySelectorAll('nav a');
+
+                if (isScrolled) {
+                    // Navbar
+                    header.classList.remove('bg-transparent');
+                    header.classList.add(
+                        'bg-white',
+                        'backdrop-blur-md',
+                        'shadow-md'
+                    );
+
+                    // Logo text
+                    logo?.classList.remove('text-primary-50');
+                    logo?.classList.add('text-slate-800');
+
+                    // Logo icon
+                    logoIcon?.classList.remove('text-accent-amber');
+                    logoIcon?.classList.add('text-primary-500');
+
+                    // Desktop navigation
+                    desktopLinks.forEach((link) => {
+                        link.classList.remove('text-primary-50');
+                        link.classList.add('text-slate-700');
+                    });
+
+                    // Mobile button
+                    mobileMenuBtn?.classList.remove('text-primary-50');
+                    mobileMenuBtn?.classList.add('text-slate-700');
+
+                } else {
+                    // Navbar
+                    header.classList.add('bg-transparent');
+                    header.classList.remove(
+                        'bg-white',
+                        'backdrop-blur-md',
+                        'shadow-md'
+                    );
+
+                    // Logo text
+                    logo?.classList.add('text-primary-50');
+                    logo?.classList.remove('text-slate-800');
+
+                    // Logo icon
+                    logoIcon?.classList.add('text-accent-amber');
+                    logoIcon?.classList.remove('text-primary-500');
+
+                    // Desktop navigation
+                    desktopLinks.forEach((link) => {
+                        link.classList.add('text-primary-50');
+                        link.classList.remove('text-slate-700');
+                    });
+
+                    // Mobile button
+                    mobileMenuBtn?.classList.add('text-primary-50');
+                    mobileMenuBtn?.classList.remove('text-slate-700');
+                }
+            };
+
+            window.addEventListener('scroll', handleNavbarScroll);
+
+            // Jalankan sekali saat halaman pertama kali dibuka
+            handleNavbarScroll();
+
+
+            // =========================
+            // Mobile Menu
+            // =========================
+            mobileMenuBtn?.addEventListener('click', () => {
+                mobileMenu?.classList.toggle('hidden');
+
+                const isOpen = !mobileMenu?.classList.contains('hidden');
+
+                if (isOpen) {
+                    menuIcon?.setAttribute('data-lucide', 'x');
+                } else {
+                    menuIcon?.setAttribute('data-lucide', 'menu');
+                }
+
+                // Render ulang icon Lucide
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            });
+
+
+            // =========================
+            // Mobile Navigation
+            // =========================
+            mobileMenu?.querySelectorAll('a[href^="#"]').forEach((link) => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    const targetId = link.getAttribute('href');
+                    const target = document.querySelector(targetId);
+
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                        });
+                    }
+
+                    // Tutup mobile menu
+                    mobileMenu.classList.add('hidden');
+
+                    // Kembalikan icon hamburger
+                    menuIcon?.setAttribute('data-lucide', 'menu');
+
+                    if (window.lucide) {
+                        lucide.createIcons();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

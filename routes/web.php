@@ -26,9 +26,13 @@ use Illuminate\Support\Facades\Mail;
 //     return 'Email berhasil dikirim.';
 // });
 
+Route::get('/', [HomeController::class, 'index'])->name('landing');
+Route::get('/download/qrcode', [HomeController::class, 'downloadqrcode'])->name('downloadqrcode');
+Route::get('peserta/qrgenerate/{id}', [PesertaController::class, 'generate'])->name('peserta.qrgenerate');
+
 Route::middleware(['guest'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('login');
-    Route::post('/', [HomeController::class, 'login'])->name('login.post');
+    Route::get('login', [HomeController::class, 'login'])->name('login');
+    Route::post('login', [HomeController::class, 'loginpost'])->name('login.post');
 });
 
 
@@ -36,7 +40,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     /* Data Peserta */
-    Route::get('peserta/qrgenerate/{id}', [PesertaController::class, 'generate'])->name('peserta.qrgenerate');
     Route::put('peserta/verif/{id}', [PesertaController::class, 'verif'])->name('peserta.verif');
     Route::post('peserta/sendmass', [PesertaController::class, 'sendMassEmail'])->name('peserta.sendmass');
     Route::resource('peserta', PesertaController::class)->except('show');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Peserta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,18 @@ class HomeController extends Controller
         return view("welcome");
     }
 
-    public function login(Request $request)
+    public function downloadqrcode()
+    {
+        $datas = Peserta::orderBy('nama_karyawan')->get();
+        return view("downloadqrcode", compact("datas"));
+    }
+
+    public function login()
+    {
+        return view("auth.login");
+    }
+
+    public function loginpost(Request $request)
     {
         $credentials = $request->validate([
             'username' => ['required'],
